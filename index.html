@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Retícula Editorial — Diagramación Editorial · 2026</title>
+<title>Calculadora de Retícula Editorial — Diagramación Editorial · UTP 2026</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap');
@@ -97,6 +97,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper-deep);color:var(--i
 .btn-apply{display:inline-flex;align-items:center;gap:.25rem;margin-top:.4rem;padding:.35rem .75rem;border:1.5px solid var(--cs-gutter-v);border-radius:3px;background:rgba(30,160,80,.07);color:var(--cs-gutter-v);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
 .btn-apply:hover{background:var(--cs-gutter-v);color:#fff}
 
+/* MODULE ADJUSTMENT */
+.mod-adjust-box{background:rgba(120,115,100,.06);border:1.5px solid rgba(120,115,100,.2);border-left:4px solid var(--cs-module);border-radius:var(--radius);padding:.65rem .75rem;margin-top:.5rem;font-size:.8rem;line-height:1.65}
+.mod-adjust-box h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--cs-module);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+.mod-adjust-result{background:rgba(120,115,100,.06);border:1.5px solid rgba(120,115,100,.2);border-radius:var(--radius);padding:.5rem .7rem;margin-top:.4rem;font-size:.8rem;color:var(--ink-soft);line-height:1.55}
+.mod-adjust-result strong{color:var(--cs-module);font-weight:700}
+.mod-options{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}
+.mod-opt-btn{padding:.3rem .65rem;border:1.5px solid var(--cs-module);border-radius:3px;background:rgba(120,115,100,.06);color:var(--cs-module);font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
+.mod-opt-btn:hover{background:var(--cs-module);color:#fff}
+.mod-opt-btn.current{background:var(--cs-gutter-v);border-color:var(--cs-gutter-v);color:#fff;cursor:default}
+
 /* RESULTS */
 .results-box{background:#fff;border:var(--border);border-radius:var(--radius);padding:.7rem .85rem;margin-top:.6rem}
 .result-line{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px dotted var(--paper-dark);align-items:baseline;gap:.4rem}
@@ -180,7 +190,8 @@ canvas{display:block;background:#fff}
   .student-box{border:1px solid #aaa;background:none;page-break-inside:avoid}
   .actions-bar{display:none !important}
   .projection-box{page-break-inside:avoid}
-  .results-box,.adjust-box,.adjust-result,.unit-table,.linked-notice{page-break-inside:avoid}
+  .results-box,.adjust-box,.adjust-result,.unit-table,.linked-notice,.mod-adjust-box,.mod-adjust-result{page-break-inside:avoid}
+  .mod-options{display:none !important}
   .section-title{margin-top:.6rem}
   #printInstructions{display:block !important;page-break-before:always}
 }
@@ -202,7 +213,7 @@ canvas{display:block;background:#fff}
 <body>
 <header class="header">
   <h1>◧ Calculadora de <span class="accent">Retícula Editorial</span></h1>
-  <div class="header-meta">Diagramación Editorial — <br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
+  <div class="header-meta">Diagramación Editorial — <strong>Universidad Tecnológica del Perú</strong><br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
 </header>
 <div class="app">
   <aside class="controls" id="controls">
@@ -222,7 +233,7 @@ canvas{display:block;background:#fff}
       <div class="section-title"><span class="dot" style="background:var(--reg-cyan)"></span>Datos del estudiante</div>
       <div class="field-row">
         <div class="field required"><label>Nombre y apellido <span class="req">*</span></label><input type="text" id="studentName" placeholder="Ej: Juan Pérez López"></div>
-        <div class="field required"><label>Correo electrónico <span class="req">*</span></label><input type="email" id="studentEmail" placeholder="usuario@edu.pe"></div>
+        <div class="field required"><label>Correo electrónico <span class="req">*</span></label><input type="email" id="studentEmail" placeholder="usuario@utp.edu.pe"></div>
       </div>
     </div>
 
@@ -255,7 +266,7 @@ canvas{display:block;background:#fff}
     <div class="field-row triple">
       <div class="field required"><label><span class="term">Sist. pts<span class="tip"><div class="tip-title">Sistema de puntos</div>Anglosajón: 1pt=0.3528mm. Didot: 1pt=0.376mm.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades.</div></span></span> <span class="req">*</span></label><select id="pointSystem"><option value="anglo">Anglosajón</option><option value="didot">Didot</option></select></div>
       <div class="field required"><label><span class="term">Cuerpo<span class="tip"><div class="tip-title">Cuerpo tipográfico</div>Tamaño del tipo en puntos.<div class="tip-indesign"><strong>InDesign:</strong> Panel Carácter → tamaño.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="bodyPt" value="10" min="4" max="72" step="0.5"><span class="input-unit">pt</span></div></div>
-      <div class="field required"><label><span class="term">Factor<span class="tip"><div class="tip-title">Factor de interlineado</div> Factor = Interlineado (pt) / Cuerpo (pt).<div class="tip-indesign"><strong>InDesign:</strong> Carácter → interlineado.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="leadFactor" value="1.4" min="1" max="4" step="0.05"><span class="input-unit">×</span></div></div>
+      <div class="field required"><label><span class="term">Factor<span class="tip"><div class="tip-title">Factor de interlineado</div>Interlineado = Cuerpo × Factor.<div class="tip-indesign"><strong>InDesign:</strong> Carácter → interlineado.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="leadFactor" value="1.4" min="1" max="4" step="0.05"><span class="input-unit">×</span></div></div>
     </div>
 
     <!-- COLUMNAS -->
@@ -265,13 +276,19 @@ canvas{display:block;background:#fff}
       <div class="field required"><label>Filas mód. <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numRows" value="4" min="1" max="30" step="1"><span class="input-unit">filas</span></div></div>
       <div class="field required"><label><span class="term">Intercampos<span class="tip"><div class="tip-title">Intercampos</div>Líneas base de separación. Medianil = interlineado × intercampos.<div class="tip-indesign"><strong>InDesign:</strong> Medianil en Crear guías.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="gutterLines" value="1" min="0" max="10" step="1"><span class="input-unit">lín</span></div></div>
     </div>
-    <div class="linked-notice"><strong>⟡ Criterio:</strong> Medianil V = Medianil H = rejilla base × intercampos = <span class="val" id="gutterValDisplay">—</span> mm = <span class="val" id="gutterValPt">—</span> pt</div>
+    <div class="linked-notice"><strong>⟡ Criterio:</strong> Medianil V = Medianil H = rejilla base × intercampos = <span class="val" id="gutterValDisplay">—</span> = <span class="val" id="gutterValPt">—</span> pt</div>
 
     <!-- AJUSTE -->
     <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-margin)"></span>Ajuste de márgenes</div>
     <div class="adjust-box" id="adjustBox"></div>
     <div class="adjust-result" id="adjustResult"></div>
     <button class="btn-apply" id="btnApply" style="display:none">✓ Aplicar margen inferior corregido</button>
+
+    <!-- AJUSTE DE MÓDULOS -->
+    <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-module)"></span>Ajuste de módulos</div>
+    <div class="mod-adjust-box" id="modAdjustBox"></div>
+    <div class="mod-adjust-result" id="modAdjustResult"></div>
+    <div class="mod-options" id="modOptions"></div>
 
     <!-- RESULTADOS -->
     <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--ink)"></span>Resultados calculados</div>
@@ -357,7 +374,7 @@ canvas{display:block;background:#fff}
       <div class="step"><span class="step-n">▸</span><span class="step-t">Guardar como plantilla: <span class="menu-path">Archivo → Guardar como → Tipo: Plantilla de InDesign (.indt)</span></span></div>
 
       <div style="margin-top:1.2rem;padding-top:.8rem;border-top:2px solid var(--ink);font-size:.78rem;color:var(--ink-muted)">
-        <strong style="color:var(--ink)">d3magindesign</strong> · Diagramación Editorial · Mg. Mario Quiroz Martínez · 2026
+        <strong style="color:var(--ink)">d3magindesign</strong> · Diagramación Editorial — Universidad Tecnológica del Perú · Mg. Mario Quiroz Martínez · 2026
       </div>
     </div>
   </aside>
@@ -376,12 +393,13 @@ canvas{display:block;background:#fff}
       <label class="layer-toggle"><input type="checkbox" id="showModules" checked> Cuadrícula</label>
       <label class="layer-toggle"><input type="checkbox" id="showGutterV" checked> Medianil V</label>
       <label class="layer-toggle"><input type="checkbox" id="showGutterH" checked> Medianil H</label>
+      <label class="layer-toggle"><input type="checkbox" id="showLineNums" checked> N° líneas</label>
       <label class="layer-toggle"><input type="checkbox" id="showHotspots" checked> Hotspots</label>
     </div>
     <div class="zoom-controls"><button class="zoom-btn" id="zoomOut">−</button><span class="zoom-level" id="zoomLevel">100%</span><button class="zoom-btn" id="zoomIn">+</button><button class="zoom-btn" id="zoomFit">Ajustar</button></div>
   </main>
 </div>
-<footer class="footer"><strong>d3magindesign</strong> · Calculadora de Retícula Editorial · 2026</footer>
+<footer class="footer"><strong>d3magindesign</strong> · Calculadora de Retícula Editorial · UTP 2026</footer>
 
 <div id="floatingTip"><div id="floatingTipContent"></div><span class="tip-arrow" id="floatingTipArrow"></span></div>
 
@@ -390,7 +408,7 @@ canvas{display:block;background:#fff}
   'use strict';
   const PT_A=25.4/72, PT_D=0.376;
   const $=id=>document.getElementById(id);
-  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),dimUnit:$('dimUnit'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showHotspots:$('showHotspots')};
+  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),dimUnit:$('dimUnit'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showLineNums:$('showLineNums'),showHotspots:$('showHotspots')};
   const canvas=$('gridCanvas'),ctx=canvas.getContext('2d');
   const projCanvas=$('projectionCanvas'),projCtx=projCanvas.getContext('2d');
   let autoZoom=true,zoomFactor=1,lastD=null;
@@ -472,6 +490,12 @@ canvas{display:block;background:#fff}
     const u = unit || els.dimUnit.value;
     return mm * dimFactor(u);
   }
+  /* Format a mm value for display in the current dimension unit */
+  function fmtD(mm) {
+    const u = els.dimUnit.value;
+    const v = mm * dimFactor(u);
+    return v.toFixed(dimDec(u)) + ' ' + dimLabel(u);
+  }
 
   function updateDimLabels() {
     const u = els.dimUnit.value;
@@ -537,31 +561,31 @@ canvas{display:block;background:#fff}
     const tx=s(d.mIn),ty=s(d.mTop),tw=s(d.textW),th=s(d.textH);
     const hs=[];
     // Margin top
-    hs.push({x:0,y:0,w:s(d.pageW),h:ty,title:'Margen superior (Cabeza)',val:`${d.mTop.toFixed(2)} mm`,fix:''});
+    hs.push({x:0,y:0,w:s(d.pageW),h:ty,title:'Margen superior (Cabeza)',val:fmtD(d.mTop),fix:''});
     // Margin bottom
     const botH=s(d.pageH)-ty-th;
-    hs.push({x:0,y:ty+th,w:s(d.pageW),h:botH,title:'Margen inferior (Pie)',val:`${d.mBot.toFixed(2)} mm`,fix:d.isExact?'✓ Rejilla encaja exactamente':`△ Sumar ${d.remainder.toFixed(3)} mm al margen inferior para ajustar la rejilla base`});
+    hs.push({x:0,y:ty+th,w:s(d.pageW),h:botH,title:'Margen inferior (Pie)',val:fmtD(d.mBot),fix:d.isExact?'✓ Rejilla encaja exactamente':`△ Sumar ${fmtD(d.remainder)} al margen inferior para ajustar la rejilla base`});
     // Margin inner
-    hs.push({x:0,y:ty,w:tx,h:th,title:'Margen interior (Lomo)',val:`${d.mIn.toFixed(2)} mm`,fix:''});
+    hs.push({x:0,y:ty,w:tx,h:th,title:'Margen interior (Lomo)',val:fmtD(d.mIn),fix:''});
     // Margin outer
-    hs.push({x:tx+tw,y:ty,w:s(d.pageW)-tx-tw,h:th,title:'Margen exterior (Corte)',val:`${d.mOut.toFixed(2)} mm`,fix:''});
+    hs.push({x:tx+tw,y:ty,w:s(d.pageW)-tx-tw,h:th,title:'Margen exterior (Corte)',val:fmtD(d.mOut),fix:''});
     // Text area
-    hs.push({x:tx,y:ty,w:tw,h:th,title:'Área de texto (Mancha)',val:`${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm`,fix:`${d.totalLines} líneas base · ${d.nCols} cols × ${d.nRows} filas = ${d.nCols*d.nRows} módulos`});
+    hs.push({x:tx,y:ty,w:tw,h:th,title:'Área de texto (Mancha)',val:`${fmtD(d.textW)} × ${fmtD(d.textH)}`,fix:`${d.totalLines} líneas base · ${d.nCols} cols × ${d.nRows} filas = ${d.nCols*d.nRows} módulos`});
     // Each column
     for(let i=0;i<d.nCols;i++){
       const cx=tx+i*(s(d.colW)+s(d.gutterMM));
-      hs.push({x:cx,y:ty,w:s(d.colW),h:th,title:`Columna ${i+1}`,val:`Ancho: ${d.colW.toFixed(2)} mm = ${mmToPt(d.colW).toFixed(1)} pt`,fix:`${d.linesPerModule} líneas/módulo × ${d.nRows} filas`});
+      hs.push({x:cx,y:ty,w:s(d.colW),h:th,title:`Columna ${i+1}`,val:`Ancho: ${fmtD(d.colW)}`,fix:`${d.linesPerModule} líneas/módulo × ${d.nRows} filas`});
     }
     // Vertical gutters
     if(d.nCols>1&&d.gutterMM>0){for(let i=1;i<d.nCols;i++){
       const gx=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);
-      hs.push({x:gx,y:ty,w:s(d.gutterMM),h:th,title:`Medianil vertical ${i}`,val:`${d.gutterMM.toFixed(3)} mm = ${d.gutterLineCount} lín. base`,fix:'Medianil = interlineado × intercampos'});
+      hs.push({x:gx,y:ty,w:s(d.gutterMM),h:th,title:`Medianil vertical ${i}`,val:`${fmtD(d.gutterMM)} = ${d.gutterLineCount} lín. base`,fix:'Medianil = interlineado × intercampos'});
     }}
     // Horizontal gutters
     if(d.nRows>1&&d.gutterMM>0&&d.linesPerModule>0){for(let i=1;i<d.nRows;i++){
       const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;
       const gy=ty+lb*s(d.leadMM);
-      hs.push({x:tx,y:gy,w:tw,h:d.gutterLineCount*s(d.leadMM),title:`Medianil horizontal ${i}`,val:`${d.gutterMM.toFixed(3)} mm = ${d.gutterLineCount} lín. base`,fix:'Coincide con la rejilla base'});
+      hs.push({x:tx,y:gy,w:tw,h:d.gutterLineCount*s(d.leadMM),title:`Medianil horizontal ${i}`,val:`${fmtD(d.gutterMM)} = ${d.gutterLineCount} lín. base`,fix:'Coincide con la rejilla base'});
     }}
     hotspots=hs;
   }
@@ -608,7 +632,7 @@ canvas{display:block;background:#fff}
     const bodyPt=parseFloat(els.bodyPt.value)||10,leadF=parseFloat(els.leadFactor.value)||1.2;
     const leadPt=bodyPt*leadF,leadMM=ptToMM(leadPt),bodyMM=ptToMM(bodyPt);
     const gutMM=leadMM*(gLC>0?gLC:1),gutPt=leadPt*(gLC>0?gLC:1);
-    $('gutterValDisplay').textContent=gutMM.toFixed(3);$('gutterValPt').textContent=gutPt.toFixed(2);
+    $('gutterValDisplay').textContent=fmtD(gutMM);$('gutterValPt').textContent=gutPt.toFixed(2);
     const textW=Math.max(0,pageW-mIn-mOut),textH=Math.max(0,pageH-mTop-mBot);
     const tL=leadMM>0?Math.floor(textH/leadMM):0;
     const rem=leadMM>0?textH-tL*leadMM:0;
@@ -621,28 +645,86 @@ canvas{display:block;background:#fff}
 
     // Adjust box
     $('adjustBox').innerHTML=`<h4>⊕ Procedimiento</h4>
-      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto texto: <span class="mono">${pageH.toFixed(2)} mm</span> − (<span class="mono">${mTop.toFixed(2)}</span> + <span class="mono">${mBot.toFixed(2)}</span>) = <span class="mono">${textH.toFixed(3)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interl.: <span class="mono">${bodyPt} pt</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} pt</span> = <span class="mono">${leadMM.toFixed(4)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas: <span class="mono">${textH.toFixed(3)}</span> ÷ <span class="mono">${leadMM.toFixed(4)}</span> = <span class="mono">${(textH/leadMM).toFixed(3)}</span> → <span class="mono">${tL} lín.</span></span></div>
-      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${rem.toFixed(4)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">M. inf. corregido: <span class="mono">${mBot.toFixed(2)}</span> + <span class="mono">${rem.toFixed(4)}</span> = <span class="mono">${mBA.toFixed(4)} mm</span></span></div>`;
-    if(isEx){$('adjustResult').innerHTML=`<strong>✓ Rejilla exacta.</strong> ${tL} líneas en ${tHA.toFixed(2)} mm.`;$('btnApply').style.display='none'}
-    else{$('adjustResult').innerHTML=`<strong>△ Ajuste:</strong> M. inferior de <strong style="color:var(--ink)">${mBot.toFixed(2)} mm</strong> → <strong>${mBA.toFixed(3)} mm</strong> (+${rem.toFixed(3)} mm). ${tL} líneas exactas.`;$('btnApply').style.display='inline-flex'}
+      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto texto: <span class="mono">${fmtD(pageH)}</span> − (<span class="mono">${fmtD(mTop)}</span> + <span class="mono">${fmtD(mBot)}</span>) = <span class="mono">${fmtD(textH)}</span></span></div>
+      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interl.: <span class="mono">${bodyPt} pt</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} pt</span> = <span class="mono">${fmtD(leadMM)}</span></span></div>
+      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas: <span class="mono">${fmtD(textH)}</span> ÷ <span class="mono">${fmtD(leadMM)}</span> = <span class="mono">${(textH/leadMM).toFixed(3)}</span> → <span class="mono">${tL} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${fmtD(rem)}</span></span></div>
+      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">M. inf. corregido: <span class="mono">${fmtD(mBot)}</span> + <span class="mono">${fmtD(rem)}</span> = <span class="mono">${fmtD(mBA)}</span></span></div>`;
+    if(isEx){$('adjustResult').innerHTML=`<strong>✓ Rejilla exacta.</strong> ${tL} líneas en ${fmtD(tHA)}.`;$('btnApply').style.display='none'}
+    else{$('adjustResult').innerHTML=`<strong>△ Ajuste:</strong> M. inferior de <strong style="color:var(--ink)">${fmtD(mBot)}</strong> → <strong>${fmtD(mBA)}</strong> (+${fmtD(rem)}). ${tL} líneas exactas.`;$('btnApply').style.display='inline-flex'}
+
+    /* ── MODULE ADJUSTMENT ──
+     * Calculate which row counts produce exact module divisions (no remainder).
+     * Formula: totalLines = nRows × linesPerModule + (nRows - 1) × gutterLines
+     * So: linesAvailable = totalLines - (nRows - 1) × gutterLines
+     *     linesAvailable % nRows === 0 → exact fit
+     */
+    const modAdjBox=$('modAdjustBox');
+    const modAdjRes=$('modAdjustResult');
+    const modOpts=$('modOptions');
+
+    // Find valid row counts (2..20) where lines divide evenly
+    const validRows=[];
+    for(let r=1;r<=20;r++){
+      const gutLines=(r-1)*gLC;
+      const avail=tL-gutLines;
+      if(avail>0&&avail%r===0){
+        validRows.push({rows:r,linesPerMod:avail/r,totalMods:r*nCols,gutLines:gutLines});
+      }
+    }
+
+    // Current status
+    const modIsExact=(mR===0&&lPM>0);
+
+    modAdjBox.innerHTML=`<h4>⊕ Distribución de módulos</h4>
+      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Líneas base totales: <span class="mono">${tL} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Filas actuales: <span class="mono">${nRows}</span> — Intercampos: <span class="mono">${gLC} lín.</span> × <span class="mono">${nRows-1} separaciones</span> = <span class="mono">${lFG} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas disponibles para módulos: <span class="mono">${tL}</span> − <span class="mono">${lFG}</span> = <span class="mono">${lFM} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">División: <span class="mono">${lFM}</span> ÷ <span class="mono">${nRows} filas</span> = <span class="mono">${lPM} lín./módulo</span>${mR>0?` <span style="color:var(--cs-margin)">+ ${mR} lín. sobrantes</span>`:' <span style="color:var(--cs-gutter-v)">exacto</span>'}</span></div>`;
+
+    if(modIsExact){
+      modAdjRes.innerHTML=`<strong>✓ Módulos exactos.</strong> ${nRows} filas × ${lPM} lín. = ${nRows*lPM} lín. + ${lFG} lín. intercampos = ${tL} lín. totales. Cada módulo: ${fmtD(modH)} de alto.`;
+      modOpts.innerHTML='';
+    } else {
+      modAdjRes.innerHTML=`<strong>△ Ajuste necesario:</strong> Con ${nRows} filas sobran <strong>${mR} línea${mR>1?'s':''}</strong> que no encajan en los módulos. Selecciona una cantidad de filas que divida exactamente:`;
+
+      // Build option buttons
+      let btnsHtml='';
+      validRows.forEach(v=>{
+        const isCurrent=(v.rows===nRows);
+        btnsHtml+=`<button class="mod-opt-btn${isCurrent?' current':''}" data-rows="${v.rows}" ${isCurrent?'disabled':''}>${v.rows} filas → ${v.linesPerMod} lín./mód (${v.rows}×${nCols}=${v.totalMods} módulos)</button>`;
+      });
+      if(validRows.length===0){
+        btnsHtml=`<span style="font-size:.78rem;color:var(--cs-margin)">No se encontró un número de filas (1–20) que divida exactamente ${tL} líneas con ${gLC} intercampos.</span>`;
+      }
+      modOpts.innerHTML=btnsHtml;
+
+      // Attach click handlers to option buttons
+      modOpts.querySelectorAll('.mod-opt-btn:not(.current)').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          els.numRows.value=btn.dataset.rows;
+          recalc();
+        });
+      });
+    }
 
     let mN='';if(mR>0)mN=` (sobran ${mR} lín.)`;
     const wC=colW<=0?' warn':'';
+    const dU=els.dimUnit.value;
+    const showMM=dU!=='mm';
+    const mmSuf=(v)=>showMM?` <span style="color:var(--ink-faint);font-size:.74rem">(${v.toFixed(2)} mm)</span>`:'';
     $('resultsBox').innerHTML=`
-      <div class="result-line"><span class="result-label">Área de texto</span><span class="result-value">${textW.toFixed(2)} × ${tHA.toFixed(2)} mm</span></div>
+      <div class="result-line"><span class="result-label">Área de texto</span><span class="result-value">${fmtD(textW)} × ${fmtD(tHA)}${mmSuf(textW)}</span></div>
       <div class="result-line"><span class="result-label">Área texto (${sN})</span><span class="result-value">${mmToPt(textW).toFixed(1)} × ${mmToPt(tHA).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">Ancho columna</span><span class="result-value${wC}">${colW.toFixed(2)} mm = ${mmToPt(colW).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">Cuerpo</span><span class="result-value">${bodyPt} pt = ${bodyMM.toFixed(3)} mm</span></div>
-      <div class="result-line"><span class="result-label">Interlineado</span><span class="result-value">${leadPt.toFixed(2)} pt = ${leadMM.toFixed(3)} mm</span></div>
-      <div class="result-line"><span class="result-label">Medianil (V=H)</span><span class="result-value">${gutMM.toFixed(3)} mm = ${gutPt.toFixed(2)} pt</span></div>
+      <div class="result-line"><span class="result-label">Ancho columna</span><span class="result-value${wC}">${fmtD(colW)} = ${mmToPt(colW).toFixed(1)} pt</span></div>
+      <div class="result-line"><span class="result-label">Cuerpo</span><span class="result-value">${bodyPt} pt = ${fmtD(bodyMM)}</span></div>
+      <div class="result-line"><span class="result-label">Interlineado</span><span class="result-value">${leadPt.toFixed(2)} pt = ${fmtD(leadMM)}</span></div>
+      <div class="result-line"><span class="result-label">Medianil (V=H)</span><span class="result-value">${fmtD(gutMM)} = ${gutPt.toFixed(2)} pt</span></div>
       <div class="result-line"><span class="result-label">Líneas base</span><span class="result-value ${isEx?'ok':'warn'}">${tL} líneas</span></div>
       <div class="result-line"><span class="result-label">Módulos</span><span class="result-value">${nCols}×${nRows} = ${nCols*nRows}</span></div>
       <div class="result-line"><span class="result-label">Lín./módulo</span><span class="result-value">${lPM} lín.${mN}</span></div>
-      <div class="result-line"><span class="result-label">Alto módulo</span><span class="result-value">${modH.toFixed(3)} mm = ${mmToPt(modH).toFixed(2)} pt</span></div>
-      <div class="result-line"><span class="result-label">Ancho módulo</span><span class="result-value">${colW.toFixed(2)} mm = ${mmToPt(colW).toFixed(1)} pt</span></div>
+      <div class="result-line"><span class="result-label">Alto módulo</span><span class="result-value">${fmtD(modH)} = ${mmToPt(modH).toFixed(2)} pt</span></div>
+      <div class="result-line"><span class="result-label">Ancho módulo</span><span class="result-value">${fmtD(colW)} = ${mmToPt(colW).toFixed(1)} pt</span></div>
       <div class="result-line"><span class="result-label">1 pt (${sN})</span><span class="result-value">${ptMM().toFixed(4)} mm</span></div>`;
 
     const d={pageW,pageH,mTop,mBot:mBA,mBotOrig:mBot,mIn,mOut,textW,textH:tHA,nCols,nRows,gutterMM:gutMM,gutterLineCount:gLC,colW,leadMM,totalLines:tL,linesPerModule:lPM,moduleH_mm:modH,remainder:rem,isExact:isEx};
@@ -651,7 +733,7 @@ canvas{display:block;background:#fff}
     drawProjection(d);
     updateUnitTable(d);
     updatePrintInstructions(d);
-    $('dimTop').textContent=`${pageW.toFixed(1)} mm`;$('dimSide').textContent=`${pageH.toFixed(1)} mm`;
+    $('dimTop').textContent=fmtD(pageW);$('dimSide').textContent=fmtD(pageH);
   }
 
   $('btnApply').addEventListener('click',()=>{const pH=parseFloat(els.pageH.value)||297,mT=parseFloat(els.mTop.value)||0,mB=parseFloat(els.mBottom.value)||0,bP=parseFloat(els.bodyPt.value)||10,lF=parseFloat(els.leadFactor.value)||1.2;const lMM=ptToMM(bP*lF),tH=pH-mT-mB,li=Math.floor(tH/lMM),rm=tH-li*lMM;els.mBottom.value=(mB+rm).toFixed(3);recalc()});
@@ -673,8 +755,47 @@ canvas{display:block;background:#fff}
     if(els.showGutterV.checked&&d.nCols>1&&d.gutterMM>0){ctx.fillStyle='rgba(30,160,80,.25)';for(let i=1;i<d.nCols;i++){ctx.fillRect(tx+i*s(d.colW)+(i-1)*s(d.gutterMM),ty,s(d.gutterMM),th)}}
     if(els.showGutterH.checked&&d.nRows>1&&d.gutterMM>0&&d.linesPerModule>0){ctx.fillStyle='rgba(232,168,32,.3)';for(let i=1;i<d.nRows;i++){const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;ctx.fillRect(tx,ty+lb*s(d.leadMM),tw,d.gutterLineCount*s(d.leadMM))}}
     if(els.showModules.checked&&d.linesPerModule>0){ctx.strokeStyle='rgba(120,115,100,.35)';ctx.lineWidth=.8;ctx.setLineDash([4,3]);for(let i=0;i<=d.nRows;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+tw,ty);ctx.stroke()}else{const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;if(i<d.nRows&&d.gutterLineCount>0){const yB=ty+(i*d.linesPerModule+(i-1)*d.gutterLineCount)*s(d.leadMM);ctx.beginPath();ctx.moveTo(tx,yB);ctx.lineTo(tx+tw,yB);ctx.stroke();ctx.beginPath();ctx.moveTo(tx,yB+d.gutterLineCount*s(d.leadMM));ctx.lineTo(tx+tw,yB+d.gutterLineCount*s(d.leadMM));ctx.stroke()}else{ctx.beginPath();ctx.moveTo(tx,ty+lb*s(d.leadMM));ctx.lineTo(tx+tw,ty+lb*s(d.leadMM));ctx.stroke()}}}for(let i=0;i<=d.nCols;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx,ty+th);ctx.stroke()}else if(i===d.nCols){ctx.beginPath();ctx.moveTo(tx+tw,ty);ctx.lineTo(tx+tw,ty+th);ctx.stroke()}else{const xR=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);ctx.beginPath();ctx.moveTo(xR,ty);ctx.lineTo(xR,ty+th);ctx.stroke();ctx.beginPath();ctx.moveTo(xR+s(d.gutterMM),ty);ctx.lineTo(xR+s(d.gutterMM),ty+th);ctx.stroke()}}ctx.setLineDash([])}
-    if(els.showBaseline.checked&&d.leadMM>0){ctx.strokeStyle='rgba(0,151,215,.22)';ctx.lineWidth=.5;for(let i=0;i<=d.totalLines;i++){const y=ty+i*s(d.leadMM);if(y>ty+th+.5)break;ctx.beginPath();ctx.moveTo(tx,y);ctx.lineTo(tx+tw,y);ctx.stroke()}}
-    if(els.showMargins.checked){ctx.fillStyle='rgba(212,46,107,.04)';ctx.fillRect(0,0,cw,ty);ctx.fillRect(0,ty+th,cw,ch-ty-th);ctx.fillRect(0,ty,tx,th);ctx.fillRect(tx+tw,ty,cw-tx-tw,th);ctx.strokeStyle='rgba(28,26,23,.25)';ctx.lineWidth=1;ctx.strokeRect(.5,.5,cw-1,ch-1);ctx.strokeStyle='rgba(212,46,107,.45)';ctx.setLineDash([6,4]);ctx.strokeRect(tx,ty,tw,th);ctx.setLineDash([]);if(!d.isExact){const rH=s(d.remainder);ctx.fillStyle='rgba(212,46,107,.12)';ctx.fillRect(tx,ty+th,tw,rH);if(rH>8){ctx.fillStyle='rgba(212,46,107,.6)';ctx.font=`${Math.max(8,Math.min(12,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`+${d.remainder.toFixed(2)} mm`,tx+tw/2,ty+th+rH/2)}}ctx.fillStyle='rgba(180,40,80,.5)';ctx.font=`${Math.max(8,Math.min(13,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';if(s(d.mTop)>16)ctx.fillText(`${d.mTop.toFixed(1)} mm`,cw/2,ty/2);if(s(d.mBot)>16)ctx.fillText(`${d.mBot.toFixed(1)} mm`,cw/2,ty+th+(ch-ty-th)/2);if(s(d.mIn)>16){ctx.save();ctx.translate(tx/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mIn.toFixed(1)} mm`,0,0);ctx.restore()}if(s(d.mOut)>16){ctx.save();ctx.translate(tx+tw+(cw-tx-tw)/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mOut.toFixed(1)} mm`,0,0);ctx.restore()}}
+    if(els.showBaseline.checked&&d.leadMM>0){
+      ctx.strokeStyle='rgba(0,151,215,.22)';ctx.lineWidth=.5;
+      // Calculate font size and numbering interval based on available space
+      const linePx=s(d.leadMM);
+      const numFontSize=Math.max(6,Math.min(11,linePx*.7,sc*2.5));
+      // Show every Nth number so they don't overlap
+      // Each number needs ~numFontSize px of vertical space
+      const numInterval=Math.max(1,Math.ceil((numFontSize+2)/linePx));
+      // Determine if there's room in the inner margin for numbers
+      const numSpace=tx; // inner margin in px
+      const showNums=numSpace>14;
+
+      for(let i=0;i<=d.totalLines;i++){
+        const y=ty+i*s(d.leadMM);
+        if(y>ty+th+.5)break;
+        ctx.strokeStyle='rgba(0,151,215,.22)';ctx.lineWidth=.5;
+        ctx.beginPath();ctx.moveTo(tx,y);ctx.lineTo(tx+tw,y);ctx.stroke();
+      }
+      // Draw line numbers in the inner margin
+      if(showNums&&els.showLineNums.checked){
+        ctx.font=`500 ${numFontSize}px "JetBrains Mono",monospace`;
+        ctx.textAlign='right';
+        ctx.textBaseline='middle';
+        for(let i=1;i<=d.totalLines;i++){
+          const y=ty+i*s(d.leadMM);
+          if(y>ty+th+.5)break;
+          if(i%numInterval===0||i===1||i===d.totalLines){
+            // Alternate opacity for readability
+            const isMulti5=(i%5===0);
+            const isMulti10=(i%10===0);
+            ctx.fillStyle=isMulti10?'rgba(0,151,215,.7)':isMulti5?'rgba(0,151,215,.5)':'rgba(0,151,215,.3)';
+            ctx.fillText(String(i),tx-3,y);
+            // Small tick mark for numbered lines
+            ctx.strokeStyle=isMulti10?'rgba(0,151,215,.4)':isMulti5?'rgba(0,151,215,.3)':'rgba(0,151,215,.15)';
+            ctx.lineWidth=isMulti10?1:.6;
+            ctx.beginPath();ctx.moveTo(tx-1,y);ctx.lineTo(tx+3,y);ctx.stroke();
+          }
+        }
+      }
+    }
+    if(els.showMargins.checked){ctx.fillStyle='rgba(212,46,107,.04)';ctx.fillRect(0,0,cw,ty);ctx.fillRect(0,ty+th,cw,ch-ty-th);ctx.fillRect(0,ty,tx,th);ctx.fillRect(tx+tw,ty,cw-tx-tw,th);ctx.strokeStyle='rgba(28,26,23,.25)';ctx.lineWidth=1;ctx.strokeRect(.5,.5,cw-1,ch-1);ctx.strokeStyle='rgba(212,46,107,.45)';ctx.setLineDash([6,4]);ctx.strokeRect(tx,ty,tw,th);ctx.setLineDash([]);if(!d.isExact){const rH=s(d.remainder);ctx.fillStyle='rgba(212,46,107,.12)';ctx.fillRect(tx,ty+th,tw,rH);if(rH>8){ctx.fillStyle='rgba(212,46,107,.6)';ctx.font=`${Math.max(8,Math.min(12,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`+${fmtD(d.remainder)}`,tx+tw/2,ty+th+rH/2)}}ctx.fillStyle='rgba(180,40,80,.5)';ctx.font=`${Math.max(8,Math.min(13,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';if(s(d.mTop)>16)ctx.fillText(fmtD(d.mTop),cw/2,ty/2);if(s(d.mBot)>16)ctx.fillText(fmtD(d.mBot),cw/2,ty+th+(ch-ty-th)/2);if(s(d.mIn)>16){ctx.save();ctx.translate(tx/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(fmtD(d.mIn),0,0);ctx.restore()}if(s(d.mOut)>16){ctx.save();ctx.translate(tx+tw+(cw-tx-tw)/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(fmtD(d.mOut),0,0);ctx.restore()}}
     if(els.showGutterV.checked||els.showModules.checked){ctx.strokeStyle='rgba(30,160,80,.4)';ctx.lineWidth=.7;for(let i=0;i<d.nCols;i++){ctx.strokeRect(tx+i*(s(d.colW)+s(d.gutterMM)),ty,s(d.colW),th)}}
     // Crop marks
     ctx.strokeStyle='rgba(28,26,23,.18)';ctx.lineWidth=.6;const cm=8;[[0,0,-1,0],[0,0,0,-1],[cw,0,1,0],[cw,0,0,-1],[0,ch,-1,0],[0,ch,0,1],[cw,ch,1,0],[cw,ch,0,1]].forEach(([x,y,dx,dy])=>{ctx.beginPath();ctx.moveTo(x+dx*3,y+dy*3);ctx.lineTo(x+dx*cm,y+dy*cm);ctx.stroke()});
@@ -923,7 +1044,7 @@ canvas{display:block;background:#fff}
   $('zoomFit').addEventListener('click',()=>{autoZoom=true;recalc()});
   $('infoToggle').addEventListener('click',()=>$('infoPanel').classList.toggle('open'));
   document.querySelectorAll('#controls input[type="number"],#controls select').forEach(el=>{el.addEventListener('input',recalc);el.addEventListener('change',recalc)});
-  [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH,els.showHotspots].forEach(el=>el.addEventListener('change',recalc));
+  [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH,els.showLineNums,els.showHotspots].forEach(el=>el.addEventListener('change',recalc));
   let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{if(autoZoom)recalc()},80)});
   updateDimLabels();
   recalc();
