@@ -2,7 +2,7 @@
 
 **Herramienta pedagógica interactiva para el cálculo de retículas editoriales impresas**
 
-Curso: Diagramación Editorial · Universidad Tecnológica del Perú (UTP)
+Curso: Diagramación Editorial 
 Docente: Mg. Mario Quiroz Martínez · 2026
 Marca: d3magindesign
 
@@ -269,6 +269,6 @@ Todo el código (HTML, CSS y JavaScript) está contenido en un solo archivo `.ht
 
 ## Licencia
 
-Herramienta pedagógica desarrollada para uso académico en el curso de Diagramación Editorial de la Universidad Tecnológica del Perú (UTP). Año 2026.
+Herramienta pedagógica desarrollada para uso académico en el curso de Diagramación Editorial . Año 2026.
 
 **d3magindesign** · Mg. Mario Quiroz Martínez
