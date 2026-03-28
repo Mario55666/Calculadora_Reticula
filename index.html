@@ -49,11 +49,15 @@ body{font-family:'DM Sans','Helvetica Neue',sans-serif;background:var(--paper-de
 .required-legend .req{font-size:.95rem;margin-left:0}
 
 .term{position:relative;display:inline;border-bottom:1.5px dotted var(--reg-cyan);cursor:help;color:inherit;font-weight:inherit}
-.term .tip{display:none;position:fixed;z-index:9999;width:340px;max-width:92vw;background:var(--ink);color:rgba(246,243,236,.90);border-radius:6px;padding:.85rem 1rem;font-size:.88rem;line-height:1.6;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 8px 32px rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.15);pointer-events:none;font-family:'DM Sans',sans-serif}
-.term:hover .tip,.term:focus .tip{display:block}
-.tip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--reg-cyan);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em}
-.tip-indesign{margin-top:.4rem;padding-top:.4rem;border-top:1px solid rgba(246,243,236,.1);font-size:.84rem;color:rgba(246,243,236,.6)}
-.tip-indesign strong{color:var(--reg-yellow);font-weight:600}
+.term .tip{display:none}
+
+/* Floating tooltip — appended to body, never clipped */
+#floatingTip{position:fixed;z-index:99999;width:340px;max-width:90vw;background:var(--ink);color:rgba(246,243,236,.92);border-radius:8px;padding:.95rem 1.1rem;font-size:.88rem;line-height:1.65;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 12px 48px rgba(0,0,0,.32),0 3px 12px rgba(0,0,0,.18);pointer-events:none;font-family:'DM Sans',sans-serif;opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}
+#floatingTip.open{opacity:1;visibility:visible}
+#floatingTip .tip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:var(--reg-cyan);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em}
+#floatingTip .tip-indesign{margin-top:.45rem;padding-top:.45rem;border-top:1px solid rgba(246,243,236,.12);font-size:.84rem;color:rgba(246,243,236,.58)}
+#floatingTip .tip-indesign strong{color:var(--reg-yellow);font-weight:600}
+#floatingTip .tip-arrow{position:absolute;width:14px;height:14px;background:var(--ink);transform:rotate(45deg);z-index:-1}
 
 .section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.10em;color:var(--ink-soft);margin:1.6rem 0 .6rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:.5rem;position:relative}
 .section-title:first-child{margin-top:0}
@@ -147,7 +151,7 @@ canvas{display:block;background:#fff}
 <body>
 <header class="header">
   <h1>◧ Calculadora de <span class="accent">Retícula Editorial</span></h1>
-  <div class="header-meta">Diagramación Editorial <br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
+  <div class="header-meta">Diagramación Editorial<br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
 </header>
 <div class="app">
   <aside class="controls" id="controls">
@@ -238,6 +242,8 @@ canvas{display:block;background:#fff}
 </div>
 <footer class="footer"><strong>d3magindesign</strong> · Calculadora de Retícula Editorial · 2026</footer>
 
+<div id="floatingTip"><div id="floatingTipContent"></div><span class="tip-arrow" id="floatingTipArrow"></span></div>
+
 <script>
 (function(){
   'use strict';
@@ -247,8 +253,105 @@ canvas{display:block;background:#fff}
   const canvas=$('gridCanvas'),ctx=canvas.getContext('2d');
   let autoZoom=true,zoomFactor=1;
 
-  // Tooltip positioning
-  document.querySelectorAll('.term').forEach(t=>{const tip=t.querySelector('.tip');if(!tip)return;t.addEventListener('mouseenter',()=>{const r=t.getBoundingClientRect();let l=r.left,top=r.bottom+10;if(l+340>window.innerWidth-12)l=window.innerWidth-352;if(l<8)l=8;if(top+220>window.innerHeight){top=r.top-10;tip.style.transform='translateY(-100%)'}else{tip.style.transform='none'}tip.style.left=l+'px';tip.style.top=top+'px'})});
+  /*
+   * FLOATING TOOLTIP SYSTEM
+   * The tooltip element (#floatingTip) lives directly on <body>,
+   * completely outside the scrollable .controls panel.
+   * This prevents any overflow:auto/hidden clipping.
+   *
+   * On mouseenter: clone the .tip content into #floatingTip,
+   * measure its real size, then position it within the viewport.
+   */
+  (function initTooltips() {
+    const tip       = document.getElementById('floatingTip');
+    const tipBody   = document.getElementById('floatingTipContent');
+    const tipArrow  = document.getElementById('floatingTipArrow');
+    const EDGE      = 14;   // px from viewport edge
+    const GAP       = 12;   // px between term and tooltip
+    let hideTimer   = null;
+
+    function show(term) {
+      // Find the inline .tip and copy its HTML
+      const src = term.querySelector('.tip');
+      if (!src) return;
+      tipBody.innerHTML = src.innerHTML;
+
+      // Render off-screen to measure
+      tip.style.left = '-9999px';
+      tip.style.top  = '-9999px';
+      tip.classList.add('open');
+
+      // Force reflow so dimensions are computed
+      const tipW = tip.offsetWidth;
+      const tipH = tip.offsetHeight;
+
+      const tr = term.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // ── Vertical: prefer below, fallback above, clamp ──
+      const spaceBelow = vh - tr.bottom - GAP;
+      const spaceAbove = tr.top - GAP;
+      let top;
+      let above = false;
+
+      if (spaceBelow >= tipH + EDGE) {
+        top = tr.bottom + GAP;
+      } else if (spaceAbove >= tipH + EDGE) {
+        top = tr.top - GAP - tipH;
+        above = true;
+      } else if (spaceBelow >= spaceAbove) {
+        top = vh - tipH - EDGE;
+      } else {
+        top = EDGE;
+        above = true;
+      }
+
+      // ── Horizontal: center on term, clamp to viewport ──
+      let left = tr.left + tr.width / 2 - tipW / 2;
+      if (left + tipW > vw - EDGE) left = vw - tipW - EDGE;
+      if (left < EDGE) left = EDGE;
+
+      // Final vertical clamp
+      if (top < EDGE) top = EDGE;
+      if (top + tipH > vh - EDGE) top = vh - tipH - EDGE;
+
+      // ── Arrow: point at the center of the term ──
+      const arrowX = Math.max(18, Math.min(tipW - 30,
+        tr.left + tr.width / 2 - left - 7));
+      tipArrow.style.left = arrowX + 'px';
+      if (above) {
+        tipArrow.style.top  = 'auto';
+        tipArrow.style.bottom = '-6px';
+      } else {
+        tipArrow.style.top  = '-6px';
+        tipArrow.style.bottom = 'auto';
+      }
+
+      // Apply
+      tip.style.left = Math.round(left) + 'px';
+      tip.style.top  = Math.round(top)  + 'px';
+    }
+
+    function hide() {
+      tip.classList.remove('open');
+    }
+
+    // Attach to every .term
+    document.querySelectorAll('.term').forEach(term => {
+      term.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimer);
+        show(term);
+      });
+      term.addEventListener('mouseleave', () => {
+        hideTimer = setTimeout(hide, 80);
+      });
+    });
+
+    // Also hide on scroll inside controls (user scrolled away from term)
+    const ctrl = document.getElementById('controls');
+    if (ctrl) ctrl.addEventListener('scroll', hide, { passive: true });
+  })();
 
   $('introCollapseBtn').addEventListener('click',()=>{const p=$('introPanel'),b=$('introCollapseBtn');p.classList.toggle('collapsed');b.textContent=p.classList.contains('collapsed')?'+':'−'});
   els.paperSize.addEventListener('change',()=>{const v=els.paperSize.value;if(v!=='custom'){const[w,h]=v.split(',').map(Number);els.pageW.value=w;els.pageH.value=h}recalc()});
