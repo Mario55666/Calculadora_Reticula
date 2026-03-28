@@ -227,12 +227,14 @@ canvas{display:block;background:#fff}
     </div>
 
     <!-- FORMATO -->
-    <div class="section-title"><span class="dot" style="background:var(--ink)"></span><span class="term">Formato de papel<span class="tip"><div class="tip-title">Formato de papel</div>Dimensiones físicas de la página. ISO A: proporción 1:√2. ANSI: norteamericano. JIS B: japonés. K: chino.<div class="tip-indesign"><strong>InDesign:</strong> Archivo → Nuevo documento → Anchura / Altura.</div></span></span></div>
+    <div class="section-title"><span class="dot" style="background:var(--ink)"></span><span class="term">Formato de papel<span class="tip"><div class="tip-title">Formato de papel</div>Dimensiones físicas de la página. ISO A: proporción 1:√2. ANSI: norteamericano. JIS B: japonés. K: chino. Puedes ingresar las dimensiones en cualquier unidad de medida tipográfica.<div class="tip-indesign"><strong>InDesign:</strong> Archivo → Nuevo documento → Anchura / Altura. La unidad se configura en Preferencias → Unidades e incrementos.</div></span></span></div>
     <div class="field-row single"><div class="field required"><label>Sistema / Tamaño <span class="req">*</span></label><select id="paperSize"><optgroup label="ISO Serie A"><option value="841,1189">A0 — 841×1189 mm</option><option value="594,841">A1 — 594×841 mm</option><option value="420,594">A2 — 420×594 mm</option><option value="297,420">A3 — 297×420 mm</option><option value="210,297" selected>A4 — 210×297 mm</option><option value="148,210">A5 — 148×210 mm</option></optgroup><optgroup label="ANSI / Imperial"><option value="215.9,279.4">Letter — 216×279 mm</option><option value="215.9,355.6">Legal — 216×356 mm</option><option value="279.4,431.8">Tabloid — 279×432 mm</option><option value="184.15,266.7">Executive — 184×267 mm</option></optgroup><optgroup label="JIS B"><option value="257,364">B4 — 257×364 mm</option><option value="182,257">B5 — 182×257 mm</option><option value="128,182">B6 — 128×182 mm</option></optgroup><optgroup label="Formatos K"><option value="270,390">8K — 270×390 mm</option><option value="195,270">16K — 195×270 mm</option><option value="130,185">32K — 130×185 mm</option></optgroup><optgroup label="Personalizado"><option value="custom">Personalizado</option></optgroup></select></div></div>
-    <div class="field-row">
-      <div class="field required"><label><span class="term">Ancho<span class="tip"><div class="tip-title">Ancho de página</div>Dimensión horizontal.<div class="tip-indesign"><strong>InDesign:</strong> Anchura.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageW" value="210" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Alto<span class="tip"><div class="tip-title">Alto de página</div>Dimensión vertical.<div class="tip-indesign"><strong>InDesign:</strong> Altura.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageH" value="297" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
+    <div class="field-row triple">
+      <div class="field required"><label><span class="term">Ancho<span class="tip"><div class="tip-title">Ancho de página</div>Dimensión horizontal del formato. Se ingresa en la unidad seleccionada y se convierte internamente a milímetros.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Anchura».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageW" value="210" min="0" max="99999" step="0.01"><span class="input-unit" id="dimUnitW">mm</span></div></div>
+      <div class="field required"><label><span class="term">Alto<span class="tip"><div class="tip-title">Alto de página</div>Dimensión vertical del formato. Se ingresa en la unidad seleccionada.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Altura».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageH" value="297" min="0" max="99999" step="0.01"><span class="input-unit" id="dimUnitH">mm</span></div></div>
+      <div class="field"><label><span class="term">Unidad<span class="tip"><div class="tip-title">Unidad de medida de formato</div>Selecciona la unidad para ingresar las dimensiones del papel. Los valores se convierten automáticamente. Al cambiar de unidad, las medidas actuales se reconvierten a la nueva unidad sin alterar el tamaño real de la página.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos → Horizontal / Vertical. Puedes usar mm, picas, pulgadas, etc.</div></span></span></label><select id="dimUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglo (pt)</option><option value="ptD">Puntos Didot (ptD)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi</option><option value="px300">Píxeles 300 dpi</option></select></div>
     </div>
+    <div id="dimMmReadout" style="font-size:.74rem;color:var(--ink-muted);margin-top:.1rem;font-family:'JetBrains Mono',monospace;display:none"></div>
 
     <!-- UNIDAD DE VISUALIZACIÓN -->
     <div class="section-title"><span class="dot" style="background:var(--reg-yellow)"></span><span class="term">Unidad de visualización<span class="tip"><div class="tip-title">Unidades de medida</div>Selecciona la unidad para ver las dimensiones convertidas: milímetros, centímetros, picas, pulgadas, puntos, cíceros, ágatas o píxeles (a 72 y 300 dpi).<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos.</div></span></span></div>
@@ -355,7 +357,7 @@ canvas{display:block;background:#fff}
       <div class="step"><span class="step-n">▸</span><span class="step-t">Guardar como plantilla: <span class="menu-path">Archivo → Guardar como → Tipo: Plantilla de InDesign (.indt)</span></span></div>
 
       <div style="margin-top:1.2rem;padding-top:.8rem;border-top:2px solid var(--ink);font-size:.78rem;color:var(--ink-muted)">
-        <strong style="color:var(--ink)">d3magindesign</strong> · Diagramación Editorial — Universidad Tecnológica del Perú · Mg. Mario Quiroz Martínez · 2026
+        <strong style="color:var(--ink)">d3magindesign</strong> · Diagramación Editorial · Mg. Mario Quiroz Martínez · 2026
       </div>
     </div>
   </aside>
@@ -388,7 +390,7 @@ canvas{display:block;background:#fff}
   'use strict';
   const PT_A=25.4/72, PT_D=0.376;
   const $=id=>document.getElementById(id);
-  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showHotspots:$('showHotspots')};
+  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),dimUnit:$('dimUnit'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showHotspots:$('showHotspots')};
   const canvas=$('gridCanvas'),ctx=canvas.getContext('2d');
   const projCanvas=$('projectionCanvas'),projCtx=projCanvas.getContext('2d');
   let autoZoom=true,zoomFactor=1,lastD=null;
@@ -440,7 +442,93 @@ canvas{display:block;background:#fff}
   })();
 
   $('introCollapseBtn').addEventListener('click',()=>{const p=$('introPanel'),b=$('introCollapseBtn');p.classList.toggle('collapsed');b.textContent=p.classList.contains('collapsed')?'+':'−'});
-  els.paperSize.addEventListener('change',()=>{const v=els.paperSize.value;if(v!=='custom'){const[w,h]=v.split(',').map(Number);els.pageW.value=w;els.pageH.value=h}recalc()});
+
+  /*
+   * DIMENSION UNIT SYSTEM
+   * The user can enter page dimensions in any unit.
+   * Internally everything is stored/computed in mm.
+   * dimToMM(val) converts from current display unit → mm
+   * mmToDim(mm) converts from mm → current display unit
+   */
+  let prevDimUnit = 'mm'; // track previous unit for conversion
+
+  function dimFactor(unit) {
+    /* Returns how many of [unit] fit in 1 mm (multiply mm × factor = unit) */
+    return UNITS[unit] ? UNITS[unit].factor : 1;
+  }
+  function dimDec(unit) {
+    return UNITS[unit] ? UNITS[unit].dec : 2;
+  }
+  function dimLabel(unit) {
+    return UNITS[unit] ? UNITS[unit].label : 'mm';
+  }
+  function dimToMM(val, unit) {
+    /* Convert a value in [unit] to mm */
+    const f = dimFactor(unit || els.dimUnit.value);
+    return f !== 0 ? val / f : val;
+  }
+  function mmToDimVal(mm, unit) {
+    /* Convert mm to display unit value */
+    const u = unit || els.dimUnit.value;
+    return mm * dimFactor(u);
+  }
+
+  function updateDimLabels() {
+    const u = els.dimUnit.value;
+    const lbl = dimLabel(u);
+    $('dimUnitW').textContent = lbl;
+    $('dimUnitH').textContent = lbl;
+  }
+
+  // When dimension unit changes: convert current values to new unit
+  els.dimUnit.addEventListener('change', () => {
+    const oldUnit = prevDimUnit;
+    const newUnit = els.dimUnit.value;
+    // Read current values in old unit → convert to mm → convert to new unit
+    const wOld = parseFloat(els.pageW.value) || 0;
+    const hOld = parseFloat(els.pageH.value) || 0;
+    const wMM = dimToMM(wOld, oldUnit);
+    const hMM = dimToMM(hOld, oldUnit);
+    const dec = dimDec(newUnit);
+    els.pageW.value = mmToDimVal(wMM, newUnit).toFixed(dec);
+    els.pageH.value = mmToDimVal(hMM, newUnit).toFixed(dec);
+    // Update step based on unit precision
+    els.pageW.step = dec >= 3 ? '0.001' : dec >= 2 ? '0.01' : '0.1';
+    els.pageH.step = els.pageW.step;
+    prevDimUnit = newUnit;
+    updateDimLabels();
+    updateDimReadout();
+    recalc();
+  });
+
+  // Show mm equivalent when not in mm
+  function updateDimReadout() {
+    const u = els.dimUnit.value;
+    const rd = $('dimMmReadout');
+    if (u === 'mm') { rd.style.display = 'none'; return; }
+    const wMM = dimToMM(parseFloat(els.pageW.value) || 0);
+    const hMM = dimToMM(parseFloat(els.pageH.value) || 0);
+    rd.style.display = 'block';
+    rd.textContent = `≡ ${wMM.toFixed(2)} × ${hMM.toFixed(2)} mm`;
+  }
+
+  // Paper size preset: values are always in mm, convert to current unit
+  els.paperSize.addEventListener('change', () => {
+    const v = els.paperSize.value;
+    if (v !== 'custom') {
+      const [wMM, hMM] = v.split(',').map(Number);
+      const u = els.dimUnit.value;
+      const dec = dimDec(u);
+      els.pageW.value = mmToDimVal(wMM, u).toFixed(dec);
+      els.pageH.value = mmToDimVal(hMM, u).toFixed(dec);
+    }
+    updateDimReadout();
+    recalc();
+  });
+
+  // Listen for manual changes on dimension fields to update readout
+  els.pageW.addEventListener('input', updateDimReadout);
+  els.pageH.addEventListener('input', updateDimReadout);
 
   /* ── HOTSPOT ZONES — computed from grid data ── */
   let hotspots=[];
@@ -510,7 +598,9 @@ canvas{display:block;background:#fff}
      MAIN RECALC
      ══════════════════════════════════════ */
   function recalc(){
-    const pageW=parseFloat(els.pageW.value)||210,pageH=parseFloat(els.pageH.value)||297;
+    // Page dimensions: read in current display unit, convert to mm
+    const pageW=dimToMM(parseFloat(els.pageW.value)||0);
+    const pageH=dimToMM(parseFloat(els.pageH.value)||0);
     const mTop=parseFloat(els.mTop.value)||0,mBot=parseFloat(els.mBottom.value)||0;
     const mIn=parseFloat(els.mInner.value)||0,mOut=parseFloat(els.mOuter.value)||0;
     const nCols=Math.max(1,parseInt(els.numCols.value)||1),nRows=Math.max(1,parseInt(els.numRows.value)||1);
@@ -835,6 +925,7 @@ canvas{display:block;background:#fff}
   document.querySelectorAll('#controls input[type="number"],#controls select').forEach(el=>{el.addEventListener('input',recalc);el.addEventListener('change',recalc)});
   [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH,els.showHotspots].forEach(el=>el.addEventListener('change',recalc));
   let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{if(autoZoom)recalc()},80)});
+  updateDimLabels();
   recalc();
 })();
 </script>
