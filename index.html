@@ -3,210 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Retícula Editorial — Diagramación Editorial · UTP 2026</title>
+<title>Calculadora de Retícula Editorial — Diagramación Editorial · 2026</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&display=swap');
 :root{
   --paper:#f6f3ec;--paper-deep:#eae5d8;--paper-dark:#ddd7c8;
   --ink:#1c1a17;--ink-soft:#3a3630;--ink-muted:#7c7669;--ink-faint:#b0a998;
   --reg-cyan:#0097d7;--reg-magenta:#d42e6b;--reg-yellow:#e8a820;
   --cs-margin:#d42e6b;--cs-textarea:#f0e8c8;--cs-baseline:#0097d7;
   --cs-module:#78736a;--cs-gutter-v:#1ea050;--cs-gutter-h:#e8a820;
-  --radius:5px;--border:1px solid rgba(28,26,23,0.12);
+  --radius:5px;--border:1px solid rgba(28,26,23,.12);
 }
-html{font-size:16.5px}
-body{font-family:'DM Sans','Helvetica Neue',sans-serif;background:var(--paper-deep);color:var(--ink);line-height:1.55;min-height:100vh;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
-
-.header{background:var(--ink);color:var(--paper);padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;position:relative;border-bottom:3px solid var(--reg-cyan)}
-.header::before,.header::after{content:'⊕';position:absolute;font-size:1.1rem;color:var(--reg-magenta);opacity:.5}
-.header::before{left:.5rem;top:50%;transform:translateY(-50%)}
-.header::after{right:.5rem;top:50%;transform:translateY(-50%)}
-.header h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;letter-spacing:-.01em;padding-left:1.2rem}
+html{font-size:15.5px}
+body{font-family:'DM Sans',sans-serif;background:var(--paper-deep);color:var(--ink);line-height:1.5;min-height:100vh;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E")}
+.header{background:var(--ink);color:var(--paper);padding:.9rem 1.8rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;position:relative;border-bottom:3px solid var(--reg-cyan)}
+.header::before,.header::after{content:'⊕';position:absolute;font-size:1rem;color:var(--reg-magenta);opacity:.4}
+.header::before{left:.4rem;top:50%;transform:translateY(-50%)}.header::after{right:.4rem;top:50%;transform:translateY(-50%)}
+.header h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;padding-left:1rem}
 .header h1 .accent{color:var(--reg-cyan)}
-.header-meta{font-family:'Crimson Pro',serif;font-size:.95rem;color:rgba(246,243,236,.55);text-align:right;line-height:1.35;font-style:italic;padding-right:1.2rem}
-.header-meta strong{color:rgba(246,243,236,.85);font-style:normal;font-weight:600}
+.header-meta{font-family:'Crimson Pro',serif;font-size:.85rem;color:rgba(246,243,236,.5);text-align:right;font-style:italic;padding-right:1rem}
+.header-meta strong{color:rgba(246,243,236,.8);font-style:normal;font-weight:600}
+.app{display:grid;grid-template-columns:500px 1fr;min-height:calc(100vh - 58px)}
+@media(max-width:1140px){.app{grid-template-columns:1fr}.controls{max-height:none;border-right:none;border-bottom:var(--border)}}
+.controls{background:var(--paper);border-right:var(--border);padding:1.1rem 1.3rem 2rem;overflow-y:auto;max-height:calc(100vh - 58px)}
 
-.app{display:grid;grid-template-columns:470px 1fr;min-height:calc(100vh - 68px)}
-@media(max-width:1100px){.app{grid-template-columns:1fr}.controls{max-height:none;border-right:none;border-bottom:var(--border)}}
-
-.controls{background:var(--paper);border-right:var(--border);padding:1.3rem 1.5rem 2.5rem;overflow-y:auto;max-height:calc(100vh - 68px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E")}
-
-.intro-panel{background:linear-gradient(135deg,rgba(0,151,215,.06) 0%,rgba(232,168,32,.06) 100%);border:1.5px solid rgba(0,151,215,.20);border-left:4px solid var(--reg-cyan);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1.2rem;position:relative}
-.intro-panel h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--reg-cyan);margin-bottom:.45rem;display:flex;align-items:center;gap:.35rem}
-.intro-panel p{font-size:.92rem;line-height:1.65;color:var(--ink-soft);margin-bottom:.4rem}
+/* INTRO */
+.intro-panel{background:linear-gradient(135deg,rgba(0,151,215,.05),rgba(232,168,32,.05));border:1.5px solid rgba(0,151,215,.18);border-left:4px solid var(--reg-cyan);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:1rem;position:relative}
+.intro-panel h2{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--reg-cyan);margin-bottom:.35rem}
+.intro-panel p{font-size:.82rem;line-height:1.6;color:var(--ink-soft);margin-bottom:.3rem}
 .intro-panel p:last-child{margin-bottom:0}
-.intro-panel .hl{background:rgba(0,151,215,.10);padding:.05rem .3rem;border-radius:2px;font-weight:600;color:var(--ink)}
-.intro-collapse-btn{position:absolute;top:.7rem;right:.7rem;width:26px;height:26px;border:1.5px solid var(--paper-dark);border-radius:4px;background:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--ink-muted);transition:all .15s;font-family:'JetBrains Mono',monospace;font-weight:700;line-height:1}
+.intro-panel .hl{background:rgba(0,151,215,.10);padding:.02rem .25rem;border-radius:2px;font-weight:600;color:var(--ink)}
+.intro-collapse-btn{position:absolute;top:.55rem;right:.55rem;width:22px;height:22px;border:1.5px solid var(--paper-dark);border-radius:3px;background:var(--paper);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--ink-muted);font-family:'JetBrains Mono',monospace;font-weight:700}
 .intro-collapse-btn:hover{border-color:var(--reg-cyan);color:var(--reg-cyan)}
-.intro-panel.collapsed .intro-body{display:none}
-.intro-panel.collapsed{padding:.6rem 1.1rem}
+.intro-panel.collapsed .intro-body{display:none}.intro-panel.collapsed{padding:.5rem 1rem}
 
-.req{color:var(--cs-margin);font-weight:700;font-size:.9rem;margin-left:.15rem}
-.field.required input,.field.required select{border-color:rgba(212,46,107,.30)}
-.field.required input:focus,.field.required select:focus{border-color:var(--reg-cyan)}
-.required-legend{display:flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--ink-muted);margin-bottom:.7rem;padding:.35rem .6rem;background:rgba(212,46,107,.04);border-radius:3px;border:1px solid rgba(212,46,107,.12)}
-.required-legend .req{font-size:.95rem;margin-left:0}
+.req{color:var(--cs-margin);font-weight:700;font-size:.8rem;margin-left:.1rem}
+.field.required input,.field.required select{border-color:rgba(212,46,107,.25)}
+.required-legend{display:flex;align-items:center;gap:.3rem;font-size:.78rem;color:var(--ink-muted);margin-bottom:.6rem;padding:.3rem .5rem;background:rgba(212,46,107,.03);border-radius:3px;border:1px solid rgba(212,46,107,.1)}
 
-.term{position:relative;display:inline;border-bottom:1.5px dotted var(--reg-cyan);cursor:help;color:inherit;font-weight:inherit}
+/* TOOLTIPS */
+.term{display:inline;border-bottom:1.5px dotted var(--reg-cyan);cursor:help;color:inherit;font-weight:inherit}
 .term .tip{display:none}
-
-/* Floating tooltip — appended to body, never clipped */
-#floatingTip{position:fixed;z-index:99999;width:340px;max-width:90vw;background:var(--ink);color:rgba(246,243,236,.92);border-radius:8px;padding:.95rem 1.1rem;font-size:.88rem;line-height:1.65;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 12px 48px rgba(0,0,0,.32),0 3px 12px rgba(0,0,0,.18);pointer-events:none;font-family:'DM Sans',sans-serif;opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}
+#floatingTip{position:fixed;z-index:99999;width:330px;max-width:90vw;background:var(--ink);color:rgba(246,243,236,.92);border-radius:7px;padding:.8rem .95rem;font-size:.82rem;line-height:1.6;box-shadow:0 10px 40px rgba(0,0,0,.3),0 3px 10px rgba(0,0,0,.15);pointer-events:none;font-family:'DM Sans',sans-serif;opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s}
 #floatingTip.open{opacity:1;visibility:visible}
-#floatingTip .tip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:var(--reg-cyan);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em}
-#floatingTip .tip-indesign{margin-top:.45rem;padding-top:.45rem;border-top:1px solid rgba(246,243,236,.12);font-size:.84rem;color:rgba(246,243,236,.58)}
+#floatingTip .tip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;color:var(--reg-cyan);margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.06em}
+#floatingTip .tip-indesign{margin-top:.35rem;padding-top:.35rem;border-top:1px solid rgba(246,243,236,.1);font-size:.78rem;color:rgba(246,243,236,.55)}
 #floatingTip .tip-indesign strong{color:var(--reg-yellow);font-weight:600}
-#floatingTip .tip-arrow{position:absolute;width:14px;height:14px;background:var(--ink);transform:rotate(45deg);z-index:-1}
+#floatingTip .tip-arrow{position:absolute;width:12px;height:12px;background:var(--ink);transform:rotate(45deg);z-index:-1}
 
-.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.10em;color:var(--ink-soft);margin:1.6rem 0 .6rem;padding-bottom:.4rem;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:.5rem;position:relative}
+/* SECTIONS */
+.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.10em;color:var(--ink-soft);margin:1.3rem 0 .45rem;padding-bottom:.3rem;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:.4rem}
 .section-title:first-child{margin-top:0}
-.section-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.section-title .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.55rem}
+/* FORM — wider columns, reduced text */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-bottom:.45rem}
 .field-row.single{grid-template-columns:1fr}
 .field-row.triple{grid-template-columns:1fr 1fr 1fr}
 .field-row.quad{grid-template-columns:1fr 1fr 1fr 1fr}
-
-.field{display:flex;flex-direction:column;gap:.2rem}
-.field label{font-size:.82rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:.15rem}
-
+.field{display:flex;flex-direction:column;gap:.15rem}
+.field label{font-size:.72rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:.1rem}
 .input-wrap{position:relative;display:flex;align-items:center}
-.input-wrap input{padding-right:2.6rem !important}
-.input-unit{position:absolute;right:.55rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:500;color:var(--ink-faint);pointer-events:none;user-select:none}
+.input-wrap input{padding-right:2.2rem !important}
+.input-unit{position:absolute;right:.45rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;color:var(--ink-faint);pointer-events:none}
+.field input,.field select{padding:.4rem .5rem;border:1.5px solid var(--paper-dark);border-radius:3px;font-size:.92rem;font-family:'JetBrains Mono',monospace;font-weight:500;background:#fff;color:var(--ink);width:100%;transition:border-color .15s}
+.field select{font-family:'DM Sans',sans-serif;font-size:.85rem}
+.field input:focus,.field select:focus{outline:none;border-color:var(--reg-cyan);box-shadow:0 0 0 2px rgba(0,151,215,.12)}
 
-.field input,.field select{padding:.5rem .6rem;border:1.5px solid var(--paper-dark);border-radius:4px;font-size:1.05rem;font-family:'JetBrains Mono',monospace;font-weight:500;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s;width:100%}
-.field select{font-family:'DM Sans',sans-serif;font-size:.95rem}
-.field input:focus,.field select:focus{outline:none;border-color:var(--reg-cyan);box-shadow:0 0 0 2.5px rgba(0,151,215,.15)}
-.field input[type="number"]{-moz-appearance:textfield}
+/* UNIT CONVERTER TABLE */
+.unit-table{margin-top:.5rem;background:#fff;border:var(--border);border-radius:var(--radius);overflow:hidden}
+.unit-table table{width:100%;border-collapse:collapse;font-size:.76rem}
+.unit-table th{background:var(--ink);color:var(--paper);padding:.3rem .4rem;font-family:'Syne',sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;text-align:left}
+.unit-table td{padding:.25rem .4rem;border-bottom:1px solid var(--paper-dark);font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500}
+.unit-table tr:last-child td{border-bottom:none}
+.unit-table .u-name{font-family:'DM Sans',sans-serif;color:var(--ink-muted);font-weight:500;font-size:.74rem}
 
-.linked-notice{background:rgba(0,151,215,.07);border:1.5px solid rgba(0,151,215,.25);border-radius:var(--radius);padding:.7rem .85rem;margin-top:.5rem;font-size:.9rem;line-height:1.6;color:var(--ink-soft)}
+/* LINKED NOTICE */
+.linked-notice{background:rgba(0,151,215,.06);border:1.5px solid rgba(0,151,215,.2);border-radius:var(--radius);padding:.55rem .7rem;margin-top:.4rem;font-size:.8rem;line-height:1.55;color:var(--ink-soft)}
 .linked-notice strong{color:var(--reg-cyan);font-weight:700}
-.linked-notice .val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:1rem}
+.linked-notice .val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.88rem}
 
-.adjust-box{background:rgba(212,46,107,.06);border:1.5px solid rgba(212,46,107,.25);border-left:4px solid var(--cs-margin);border-radius:var(--radius);padding:.8rem .9rem;margin-top:.6rem;font-size:.9rem;line-height:1.7}
-.adjust-box h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--cs-margin);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
-.adjust-step{display:flex;gap:.5rem;padding:.3rem 0;border-bottom:1px dotted rgba(212,46,107,.15);align-items:baseline}
+/* ADJUST */
+.adjust-box{background:rgba(212,46,107,.05);border:1.5px solid rgba(212,46,107,.2);border-left:4px solid var(--cs-margin);border-radius:var(--radius);padding:.65rem .75rem;margin-top:.5rem;font-size:.8rem;line-height:1.65}
+.adjust-box h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;color:var(--cs-margin);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em}
+.adjust-step{display:flex;gap:.4rem;padding:.22rem 0;border-bottom:1px dotted rgba(212,46,107,.12);align-items:baseline}
 .adjust-step:last-child{border-bottom:none}
-.step-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--cs-margin);flex-shrink:0;width:1.7rem}
-.step-text{color:var(--ink-soft);font-size:.9rem}
-.step-text .mono{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.95rem}
-.adjust-result{background:rgba(30,160,80,.08);border:1.5px solid rgba(30,160,80,.25);border-radius:var(--radius);padding:.6rem .8rem;margin-top:.5rem;font-size:.9rem;color:var(--ink-soft);line-height:1.6}
+.step-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.72rem;color:var(--cs-margin);flex-shrink:0;width:1.5rem}
+.step-text{color:var(--ink-soft);font-size:.8rem}
+.step-text .mono{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.84rem}
+.adjust-result{background:rgba(30,160,80,.07);border:1.5px solid rgba(30,160,80,.2);border-radius:var(--radius);padding:.5rem .7rem;margin-top:.4rem;font-size:.8rem;color:var(--ink-soft);line-height:1.55}
 .adjust-result strong{color:var(--cs-gutter-v);font-weight:700}
-.btn-apply{display:inline-flex;align-items:center;gap:.3rem;margin-top:.5rem;padding:.45rem .9rem;border:1.5px solid var(--cs-gutter-v);border-radius:4px;background:rgba(30,160,80,.08);color:var(--cs-gutter-v);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.05em}
+.btn-apply{display:inline-flex;align-items:center;gap:.25rem;margin-top:.4rem;padding:.35rem .75rem;border:1.5px solid var(--cs-gutter-v);border-radius:3px;background:rgba(30,160,80,.07);color:var(--cs-gutter-v);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
 .btn-apply:hover{background:var(--cs-gutter-v);color:#fff}
 
-.results-box{background:#fff;border:var(--border);border-radius:var(--radius);padding:.85rem 1rem;margin-top:.8rem;box-shadow:inset 0 1px 3px rgba(0,0,0,.04)}
-.result-line{display:flex;justify-content:space-between;padding:.32rem 0;border-bottom:1px dotted var(--paper-dark);align-items:baseline;gap:.5rem}
+/* RESULTS */
+.results-box{background:#fff;border:var(--border);border-radius:var(--radius);padding:.7rem .85rem;margin-top:.6rem}
+.result-line{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px dotted var(--paper-dark);align-items:baseline;gap:.4rem}
 .result-line:last-child{border-bottom:none}
-.result-label{font-size:.9rem;color:var(--ink-muted);font-weight:500;flex-shrink:0}
-.result-value{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:600;color:var(--ink);text-align:right}
-.result-value.ok{color:var(--cs-gutter-v)}
-.result-value.warn{color:var(--cs-margin)}
+.result-label{font-size:.8rem;color:var(--ink-muted);font-weight:500;flex-shrink:0}
+.result-value{font-family:'JetBrains Mono',monospace;font-size:.84rem;font-weight:600;color:var(--ink);text-align:right}
+.result-value.ok{color:var(--cs-gutter-v)}.result-value.warn{color:var(--cs-margin)}
 
-.legend{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.65rem}
-.legend-item{display:flex;align-items:center;gap:.3rem;font-size:.82rem;font-weight:500;color:var(--ink-muted)}
-.legend-swatch{width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.1);flex-shrink:0}
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.legend-item{display:flex;align-items:center;gap:.2rem;font-size:.74rem;font-weight:500;color:var(--ink-muted)}
+.legend-swatch{width:12px;height:12px;border-radius:2px;border:1px solid rgba(0,0,0,.08);flex-shrink:0}
 
-.info-toggle{display:inline-flex;align-items:center;gap:.35rem;font-size:.88rem;font-weight:600;color:var(--ink-muted);cursor:pointer;margin-top:.7rem;padding:.4rem .7rem;border:1.5px solid var(--paper-dark);border-radius:4px;background:transparent;transition:all .15s;font-family:inherit}
+/* INFO PANEL */
+.info-toggle{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--ink-muted);cursor:pointer;margin-top:.6rem;padding:.3rem .6rem;border:1.5px solid var(--paper-dark);border-radius:3px;background:transparent;font-family:inherit;transition:all .15s}
 .info-toggle:hover{border-color:var(--ink-muted);color:var(--ink)}
-.info-panel{display:none;background:var(--ink);color:rgba(246,243,236,.80);border-radius:var(--radius);padding:1rem 1.1rem;margin-top:.5rem;font-size:.88rem;line-height:1.6}
+.info-panel{display:none;background:var(--ink);color:rgba(246,243,236,.8);border-radius:var(--radius);padding:.85rem 1rem;margin-top:.4rem;font-size:.8rem;line-height:1.55}
 .info-panel.open{display:block}
-.info-panel h4{font-family:'Crimson Pro',serif;font-weight:600;font-style:italic;color:var(--reg-yellow);margin-bottom:.3rem;font-size:1rem}
-.info-panel table{width:100%;border-collapse:collapse;margin:.4rem 0 .6rem}
-.info-panel th,.info-panel td{padding:.3rem .4rem;text-align:left;border-bottom:1px solid rgba(246,243,236,.08);font-size:.86rem}
-.info-panel th{color:var(--reg-yellow);font-weight:600;font-family:'DM Sans',sans-serif;text-transform:uppercase;font-size:.78rem;letter-spacing:.06em}
-.info-panel td .mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:rgba(246,243,236,.95);font-size:.9rem}
+.info-panel h4{font-family:'Crimson Pro',serif;font-weight:600;font-style:italic;color:var(--reg-yellow);margin-bottom:.2rem;font-size:.9rem}
+.info-panel table{width:100%;border-collapse:collapse;margin:.3rem 0 .5rem}
+.info-panel th,.info-panel td{padding:.2rem .35rem;text-align:left;border-bottom:1px solid rgba(246,243,236,.07);font-size:.78rem}
+.info-panel th{color:var(--reg-yellow);font-weight:600;text-transform:uppercase;font-size:.68rem;letter-spacing:.05em}
+.info-panel td .mono{font-family:'JetBrains Mono',monospace;font-weight:500;color:rgba(246,243,236,.95)}
 
-.preview-area{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E"),linear-gradient(135deg,#d8d2c4 0%,#c8c1b2 100%)}
+/* PREVIEW */
+.preview-area{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E"),linear-gradient(135deg,#d8d2c4,#c8c1b2)}
 .canvas-wrapper{position:relative;box-shadow:0 2px 8px rgba(28,26,23,.15),0 8px 32px rgba(28,26,23,.10),0 0 0 1px rgba(28,26,23,.06)}
 .canvas-wrapper::before{content:'';position:absolute;top:-12px;left:-12px;width:10px;height:10px;border-top:1.5px solid var(--cs-margin);border-left:1.5px solid var(--cs-margin);opacity:.5}
 .canvas-wrapper::after{content:'';position:absolute;bottom:-12px;right:-12px;width:10px;height:10px;border-bottom:1.5px solid var(--cs-margin);border-right:1.5px solid var(--cs-margin);opacity:.5}
 canvas{display:block;background:#fff}
-.dim-label{position:absolute;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--ink-muted);pointer-events:none;white-space:nowrap}
-.dim-label.top{top:-24px;left:50%;transform:translateX(-50%)}
-.dim-label.side{top:50%;right:-65px;transform:translateY(-50%) rotate(90deg)}
-.layer-toggles{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem;background:rgba(246,243,236,.85);padding:.55rem .9rem;border-radius:var(--radius);border:var(--border)}
-.layer-toggle{display:flex;align-items:center;gap:.25rem;font-size:.85rem;font-weight:500;color:var(--ink-muted);cursor:pointer;user-select:none}
-.layer-toggle input{accent-color:var(--reg-cyan);cursor:pointer;width:15px;height:15px}
-.zoom-controls{display:flex;gap:.4rem;margin-top:.6rem}
-.zoom-btn{padding:.35rem .75rem;border:1.5px solid var(--paper-dark);border-radius:4px;background:rgba(246,243,236,.9);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:600;color:var(--ink-soft);transition:all .15s}
-.zoom-btn:hover{border-color:var(--ink-muted);color:var(--ink)}
-.zoom-level{padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.88rem;color:var(--ink-muted);display:flex;align-items:center}
 
-.footer{background:var(--ink);color:rgba(246,243,236,.35);text-align:center;padding:.7rem;font-size:.82rem;letter-spacing:.03em;border-top:2px solid var(--reg-cyan)}
-.footer strong{color:rgba(246,243,236,.6)}
-.controls::-webkit-scrollbar{width:6px}
-.controls::-webkit-scrollbar-track{background:transparent}
-.controls::-webkit-scrollbar-thumb{background:var(--paper-dark);border-radius:3px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.controls>*{animation:fadeUp .35s ease both}
-.controls>*:nth-child(2){animation-delay:.04s}
-.controls>*:nth-child(3){animation-delay:.08s}
-.controls>*:nth-child(4){animation-delay:.12s}
-.controls>*:nth-child(5){animation-delay:.16s}
-.controls>*:nth-child(6){animation-delay:.20s}
+/* HOTSPOT TOOLTIP on canvas */
+#canvasTooltip{position:absolute;z-index:100;background:var(--ink);color:rgba(246,243,236,.92);border-radius:6px;padding:.55rem .7rem;font-size:.78rem;line-height:1.5;font-family:'DM Sans',sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .15s;max-width:260px;white-space:normal}
+#canvasTooltip.show{opacity:1}
+#canvasTooltip .hs-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.74rem;color:var(--reg-cyan);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.15rem}
+#canvasTooltip .hs-val{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.8rem;color:#fff}
+#canvasTooltip .hs-fix{margin-top:.25rem;padding-top:.25rem;border-top:1px solid rgba(255,255,255,.1);color:var(--reg-yellow);font-size:.74rem}
+
+.dim-label{position:absolute;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--ink-muted);pointer-events:none;white-space:nowrap}
+.dim-label.top{top:-20px;left:50%;transform:translateX(-50%)}.dim-label.side{top:50%;right:-58px;transform:translateY(-50%) rotate(90deg)}
+.layer-toggles{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.8rem;background:rgba(246,243,236,.85);padding:.4rem .7rem;border-radius:var(--radius);border:var(--border)}
+.layer-toggle{display:flex;align-items:center;gap:.2rem;font-size:.76rem;font-weight:500;color:var(--ink-muted);cursor:pointer;user-select:none}
+.layer-toggle input{accent-color:var(--reg-cyan);cursor:pointer;width:14px;height:14px}
+.zoom-controls{display:flex;gap:.3rem;margin-top:.4rem}
+.zoom-btn{padding:.25rem .6rem;border:1.5px solid var(--paper-dark);border-radius:3px;background:rgba(246,243,236,.9);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--ink-soft);transition:all .15s}
+.zoom-btn:hover{border-color:var(--ink-muted);color:var(--ink)}
+.zoom-level{padding:.25rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--ink-muted);display:flex;align-items:center}
+
+/* MODULE PROJECTION DIAGRAM */
+.projection-box{background:#fff;border:var(--border);border-radius:var(--radius);padding:.7rem;margin-top:.6rem}
+.projection-box h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.76rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+#projectionCanvas{width:100%;border-radius:3px;display:block}
+
+/* STUDENT FIELDS */
+.student-box{background:rgba(0,151,215,.04);border:1.5px solid rgba(0,151,215,.15);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:1rem}
+.student-box .section-title{margin-top:0}
+.student-box .field input{font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:400}
+.student-box .field input::placeholder{color:var(--ink-faint);font-style:italic}
+
+/* ACTION BUTTONS */
+.actions-bar{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+.action-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.5rem .9rem;border:1.5px solid;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;transition:all .15s;flex:1;justify-content:center;min-width:140px}
+.action-btn.send{border-color:var(--reg-cyan);background:rgba(0,151,215,.06);color:var(--reg-cyan)}
+.action-btn.send:hover{background:var(--reg-cyan);color:#fff}
+.action-btn.print{border-color:var(--ink-muted);background:rgba(28,26,23,.04);color:var(--ink-soft)}
+.action-btn.print:hover{background:var(--ink);color:var(--paper)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.action-btn svg{width:16px;height:16px;flex-shrink:0}
+.validation-msg{font-size:.76rem;color:var(--cs-margin);margin-top:.3rem;display:none}
+.validation-msg.show{display:block}
+
+/* PRINT STYLES */
+@media print{
+  body{background:#fff !important;font-size:11pt !important}
+  .header{padding:.5rem 1rem;border-bottom:2px solid #000;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .app{display:block !important;grid-template-columns:none !important}
+  .controls{max-height:none !important;overflow:visible !important;border-right:none !important;padding:0 !important;background:none !important}
+  .preview-area{padding:.5rem;page-break-before:always}
+  .canvas-wrapper{box-shadow:none !important;border:1px solid #ccc}
+  .intro-panel,.intro-collapse-btn,.layer-toggles,.zoom-controls,.info-toggle,.info-panel,.required-legend,.action-btn.send,.validation-msg,.footer{display:none !important}
+  .student-box{border:1px solid #aaa;background:none;page-break-inside:avoid}
+  .actions-bar{display:none !important}
+  .projection-box{page-break-inside:avoid}
+  .results-box,.adjust-box,.adjust-result,.unit-table,.linked-notice{page-break-inside:avoid}
+  .section-title{margin-top:.6rem}
+  #printInstructions{display:block !important;page-break-before:always}
+}
+#printInstructions{display:none;background:#fff;padding:1.2rem;font-size:.85rem;line-height:1.7;color:var(--ink)}
+#printInstructions h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--ink);margin-bottom:.5rem;border-bottom:2px solid var(--ink);padding-bottom:.3rem}
+#printInstructions h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--reg-cyan);margin:1rem 0 .3rem}
+#printInstructions .step{display:flex;gap:.5rem;margin-bottom:.4rem;align-items:baseline}
+#printInstructions .step-n{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--cs-margin);font-size:.8rem;flex-shrink:0;width:1.8rem}
+#printInstructions .step-t{color:var(--ink-soft)}
+#printInstructions .step-t b{color:var(--ink)}
+#printInstructions .val-box{background:rgba(0,151,215,.06);border:1px solid rgba(0,151,215,.15);border-radius:4px;padding:.5rem .7rem;margin:.4rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--ink)}
+#printInstructions .menu-path{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--reg-cyan);font-weight:500}
+
+.footer{background:var(--ink);color:rgba(246,243,236,.3);text-align:center;padding:.6rem;font-size:.74rem;border-top:2px solid var(--reg-cyan)}
+.footer strong{color:rgba(246,243,236,.55)}
+.controls::-webkit-scrollbar{width:5px}.controls::-webkit-scrollbar-thumb{background:var(--paper-dark);border-radius:3px}
 </style>
 </head>
 <body>
 <header class="header">
   <h1>◧ Calculadora de <span class="accent">Retícula Editorial</span></h1>
-  <div class="header-meta">Diagramación Editorial<br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
+  <div class="header-meta">Diagramación Editorial — <br>Docente: <strong>Mg. Mario Quiroz Martínez</strong> · 2026</div>
 </header>
 <div class="app">
   <aside class="controls" id="controls">
     <div class="intro-panel" id="introPanel">
-      <button class="intro-collapse-btn" id="introCollapseBtn" title="Minimizar / expandir">−</button>
-      <h2>⊕ ¿Qué es y para qué sirve esta calculadora?</h2>
-      <div class="intro-body" id="introBody">
-        <p>Esta herramienta calcula de forma interactiva la <span class="hl">retícula editorial</span> para proyectos de diagramación impresa: libros, revistas, periódicos y publicaciones similares. Su propósito es permitir al estudiante <strong>visualizar en tiempo real</strong> cómo las decisiones tipográficas (cuerpo, interlineado, sistema de puntos) determinan la estructura modular de la página.</p>
-        <p>El <strong>objetivo pedagógico</strong> es comprender el procedimiento matemático que subyace a toda retícula profesional: definir el formato, establecer márgenes, calcular cuántas líneas base caben en el área de texto, <strong>ajustar el margen inferior</strong> para que la rejilla base coincida exactamente, y finalmente dividir la mancha en módulos y columnas con medianiles consistentes.</p>
-        <p>Los valores calculados aquí son los mismos que se configuran en <span class="hl">Adobe InDesign</span> mediante: <em>Archivo → Nuevo documento</em> (formato y márgenes), <em>Maquetación → Márgenes y columnas</em> (columnas y medianiles), <em>Preferencias → Cuadrículas</em> (cuadrícula base: inicio e incremento), y <em>Maquetación → Crear guías</em> (filas y columnas de módulos).</p>
-        <p>Pasa el cursor sobre cualquier <span style="border-bottom:1.5px dotted var(--reg-cyan);cursor:help;">término subrayado</span> para ver su definición y su equivalencia en InDesign.</p>
+      <button class="intro-collapse-btn" id="introCollapseBtn">−</button>
+      <h2>⊕ ¿Qué es y para qué sirve?</h2>
+      <div class="intro-body">
+        <p>Calcula interactivamente la <span class="hl">retícula editorial</span> para diagramación impresa. Visualiza cómo el cuerpo, interlineado y sistema de puntos determinan la estructura modular de la página.</p>
+        <p>Los valores equivalen a los configurados en <span class="hl">Adobe InDesign</span>: <em>Archivo → Nuevo documento</em>, <em>Maquetación → Márgenes y columnas</em>, <em>Preferencias → Cuadrículas</em>, <em>Maquetación → Crear guías</em>.</p>
+        <p>Pasa el cursor sobre los <span style="border-bottom:1.5px dotted var(--reg-cyan);cursor:help;">términos subrayados</span> para ver definiciones. En la vista previa, pasa el cursor sobre cada zona de la retícula para ver sus medidas y mensajes de corrección.</p>
       </div>
     </div>
-    <div class="required-legend"><span class="req">*</span> Campos obligatorios — deben tener un valor válido para que el cálculo funcione.</div>
+    <div class="required-legend"><span class="req">*</span> Campos obligatorios para el cálculo.</div>
 
-    <div class="section-title"><span class="dot" style="background:var(--ink)"></span><span class="term">Formato de papel<span class="tip"><div class="tip-title">Formato de papel</div>Dimensiones físicas de la página. Los formatos ISO (A0–A5) mantienen la proporción 1:√2; los ANSI son norteamericanos; los JIS B son japoneses; los K son chinos.<div class="tip-indesign"><strong>InDesign:</strong> Archivo → Nuevo documento → Anchura / Altura.</div></span></span></div>
-    <div class="field-row single"><div class="field required"><label>Sistema / Tamaño <span class="req">*</span></label><select id="paperSize"><optgroup label="ISO Serie A"><option value="841,1189">A0 — 841 × 1189 mm</option><option value="594,841">A1 — 594 × 841 mm</option><option value="420,594">A2 — 420 × 594 mm</option><option value="297,420">A3 — 297 × 420 mm</option><option value="210,297" selected>A4 — 210 × 297 mm</option><option value="148,210">A5 — 148 × 210 mm</option></optgroup><optgroup label="ANSI / Imperial"><option value="215.9,279.4">Letter — 215.9 × 279.4 mm</option><option value="215.9,355.6">Legal — 215.9 × 355.6 mm</option><option value="279.4,431.8">Tabloid — 279.4 × 431.8 mm</option><option value="184.15,266.7">Executive — 184.15 × 266.7 mm</option></optgroup><optgroup label="JIS Serie B"><option value="257,364">B4 (JIS) — 257 × 364 mm</option><option value="182,257">B5 (JIS) — 182 × 257 mm</option><option value="128,182">B6 (JIS) — 128 × 182 mm</option></optgroup><optgroup label="Formatos K (China)"><option value="270,390">8K — 270 × 390 mm</option><option value="195,270">16K — 195 × 270 mm</option><option value="130,185">32K — 130 × 185 mm</option></optgroup><optgroup label="Personalizado"><option value="custom">Medidas personalizadas</option></optgroup></select></div></div>
+    <!-- DATOS DEL ESTUDIANTE -->
+    <div class="student-box">
+      <div class="section-title"><span class="dot" style="background:var(--reg-cyan)"></span>Datos del estudiante</div>
+      <div class="field-row">
+        <div class="field required"><label>Nombre y apellido <span class="req">*</span></label><input type="text" id="studentName" placeholder="Ej: Juan Pérez López"></div>
+        <div class="field required"><label>Correo electrónico <span class="req">*</span></label><input type="email" id="studentEmail" placeholder="usuario@edu.pe"></div>
+      </div>
+    </div>
+
+    <!-- FORMATO -->
+    <div class="section-title"><span class="dot" style="background:var(--ink)"></span><span class="term">Formato de papel<span class="tip"><div class="tip-title">Formato de papel</div>Dimensiones físicas de la página. ISO A: proporción 1:√2. ANSI: norteamericano. JIS B: japonés. K: chino.<div class="tip-indesign"><strong>InDesign:</strong> Archivo → Nuevo documento → Anchura / Altura.</div></span></span></div>
+    <div class="field-row single"><div class="field required"><label>Sistema / Tamaño <span class="req">*</span></label><select id="paperSize"><optgroup label="ISO Serie A"><option value="841,1189">A0 — 841×1189 mm</option><option value="594,841">A1 — 594×841 mm</option><option value="420,594">A2 — 420×594 mm</option><option value="297,420">A3 — 297×420 mm</option><option value="210,297" selected>A4 — 210×297 mm</option><option value="148,210">A5 — 148×210 mm</option></optgroup><optgroup label="ANSI / Imperial"><option value="215.9,279.4">Letter — 216×279 mm</option><option value="215.9,355.6">Legal — 216×356 mm</option><option value="279.4,431.8">Tabloid — 279×432 mm</option><option value="184.15,266.7">Executive — 184×267 mm</option></optgroup><optgroup label="JIS B"><option value="257,364">B4 — 257×364 mm</option><option value="182,257">B5 — 182×257 mm</option><option value="128,182">B6 — 128×182 mm</option></optgroup><optgroup label="Formatos K"><option value="270,390">8K — 270×390 mm</option><option value="195,270">16K — 195×270 mm</option><option value="130,185">32K — 130×185 mm</option></optgroup><optgroup label="Personalizado"><option value="custom">Personalizado</option></optgroup></select></div></div>
     <div class="field-row">
-      <div class="field required"><label><span class="term">Ancho<span class="tip"><div class="tip-title">Ancho de página</div>Dimensión horizontal del formato en milímetros.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Anchura» en Archivo → Nuevo documento.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageW" value="210" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Alto<span class="tip"><div class="tip-title">Alto de página</div>Dimensión vertical del formato en milímetros.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Altura» en Archivo → Nuevo documento.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageH" value="297" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Ancho<span class="tip"><div class="tip-title">Ancho de página</div>Dimensión horizontal.<div class="tip-indesign"><strong>InDesign:</strong> Anchura.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageW" value="210" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Alto<span class="tip"><div class="tip-title">Alto de página</div>Dimensión vertical.<div class="tip-indesign"><strong>InDesign:</strong> Altura.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageH" value="297" min="30" max="2000" step="0.1"><span class="input-unit">mm</span></div></div>
     </div>
 
-    <div class="section-title"><span class="dot" style="background:var(--cs-margin)"></span><span class="term">Márgenes<span class="tip"><div class="tip-title">Márgenes</div>Distancias entre el borde de la página y el área de texto (mancha tipográfica). Los cuatro márgenes definen el espacio de respiro del contenido.<div class="tip-indesign"><strong>InDesign:</strong> Archivo → Nuevo documento → Márgenes, o Maquetación → Márgenes y columnas.</div></span></span></div>
+    <!-- UNIDAD DE VISUALIZACIÓN -->
+    <div class="section-title"><span class="dot" style="background:var(--reg-yellow)"></span><span class="term">Unidad de visualización<span class="tip"><div class="tip-title">Unidades de medida</div>Selecciona la unidad para ver las dimensiones convertidas: milímetros, centímetros, picas, pulgadas, puntos, cíceros, ágatas o píxeles (a 72 y 300 dpi).<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos.</div></span></span></div>
+    <div class="field-row single"><div class="field"><label>Mostrar equivalencias en</label><select id="displayUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglosajones (pt)</option><option value="ptD">Puntos Didot (pt D)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi (px)</option><option value="px300">Píxeles 300 dpi (px)</option></select></div></div>
+    <div class="unit-table" id="unitTable"></div>
+
+    <!-- MÁRGENES -->
+    <div class="section-title"><span class="dot" style="background:var(--cs-margin)"></span><span class="term">Márgenes<span class="tip"><div class="tip-title">Márgenes</div>Distancias entre borde de página y área de texto.<div class="tip-indesign"><strong>InDesign:</strong> Márgenes en Nuevo documento o Maquetación → Márgenes y columnas.</div></span></span></div>
     <div class="field-row quad">
-      <div class="field required"><label><span class="term">Superior<span class="tip"><div class="tip-title">Margen superior (Cabeza)</div>Distancia entre el borde superior y la primera línea de texto.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Superior» (Top).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mTop" value="20" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Inferior<span class="tip"><div class="tip-title">Margen inferior (Pie)</div>Distancia entre la última línea y el borde inferior. <strong>Se ajusta</strong> para que la rejilla base encaje exactamente.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Inferior» (Bottom). Modificar en Maquetación → Márgenes y columnas.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mBottom" value="25" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Interior<span class="tip"><div class="tip-title">Margen interior (Lomo)</div>Distancia entre el lomo (encuadernación) y el texto.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Interior» (Inside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mInner" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Exterior<span class="tip"><div class="tip-title">Margen exterior (Corte)</div>Distancia entre el texto y el borde exterior (lado opuesto al lomo).<div class="tip-indesign"><strong>InDesign:</strong> Campo «Exterior» (Outside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mOuter" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Superior<span class="tip"><div class="tip-title">Margen superior (Cabeza)</div>Del borde superior a la primera línea.<div class="tip-indesign"><strong>InDesign:</strong> Superior (Top).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mTop" value="20" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Inferior<span class="tip"><div class="tip-title">Margen inferior (Pie)</div>De la última línea al borde inferior. <strong>Se ajusta</strong> para rejilla exacta.<div class="tip-indesign"><strong>InDesign:</strong> Inferior (Bottom).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mBottom" value="25" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Interior<span class="tip"><div class="tip-title">Margen interior (Lomo)</div>Del lomo al texto.<div class="tip-indesign"><strong>InDesign:</strong> Interior (Inside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mInner" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Exterior<span class="tip"><div class="tip-title">Margen exterior (Corte)</div>Del texto al borde exterior.<div class="tip-indesign"><strong>InDesign:</strong> Exterior (Outside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mOuter" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
     </div>
 
-    <div class="section-title"><span class="dot" style="background:var(--cs-baseline)"></span><span class="term">Tipografía y línea base<span class="tip"><div class="tip-title">Tipografía y línea base</div>El cuerpo tipográfico y el interlineado definen la «rejilla base» (baseline grid): líneas horizontales equidistantes donde se asienta cada línea de texto.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Cuadrículas → Cuadrícula base. «Inicio» = margen superior, «Incremento cada» = interlineado.</div></span></span></div>
+    <!-- TIPOGRAFÍA -->
+    <div class="section-title"><span class="dot" style="background:var(--cs-baseline)"></span><span class="term">Tipografía y línea base<span class="tip"><div class="tip-title">Tipografía y línea base</div>Cuerpo e interlineado definen la rejilla base (baseline grid).<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Cuadrículas → Inicio e Incremento.</div></span></span></div>
     <div class="field-row triple">
-      <div class="field required"><label><span class="term">Sistema pts.<span class="tip"><div class="tip-title">Sistema de puntos tipográficos</div><strong>Anglosajón</strong>: 1 pt = 1/72" ≈ 0.3528 mm, 1 pica = 12 pt ≈ 4.233 mm. <strong>Didot</strong>: 1 pt ≈ 0.376 mm, 1 cícero = 12 pt ≈ 4.512 mm.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos.</div></span></span> <span class="req">*</span></label><select id="pointSystem"><option value="anglo" selected>Anglosajón</option><option value="didot">Didot (francés)</option></select></div>
-      <div class="field required"><label><span class="term">Cuerpo<span class="tip"><div class="tip-title">Cuerpo tipográfico</div>Tamaño del tipo en puntos. Medida fundamental para calcular el interlineado y la rejilla base.<div class="tip-indesign"><strong>InDesign:</strong> Panel Carácter → tamaño de fuente.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="bodyPt" value="10" min="4" max="72" step="0.5"><span class="input-unit">pt</span></div></div>
-      <div class="field required"><label><span class="term">Factor int.<span class="tip"><div class="tip-title">Factor de interlineado</div>Multiplicador sobre el cuerpo. Interlineado = Cuerpo × Factor. Valores típicos: 1.2, 1.4, 1.5.<div class="tip-indesign"><strong>InDesign:</strong> Panel Carácter → interlineado. Cuadrículas → «Incremento cada».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="leadFactor" value="1.4" min="1" max="4" step="0.05"><span class="input-unit">×</span></div></div>
+      <div class="field required"><label><span class="term">Sist. pts<span class="tip"><div class="tip-title">Sistema de puntos</div>Anglosajón: 1pt=0.3528mm. Didot: 1pt=0.376mm.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades.</div></span></span> <span class="req">*</span></label><select id="pointSystem"><option value="anglo">Anglosajón</option><option value="didot">Didot</option></select></div>
+      <div class="field required"><label><span class="term">Cuerpo<span class="tip"><div class="tip-title">Cuerpo tipográfico</div>Tamaño del tipo en puntos.<div class="tip-indesign"><strong>InDesign:</strong> Panel Carácter → tamaño.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="bodyPt" value="10" min="4" max="72" step="0.5"><span class="input-unit">pt</span></div></div>
+      <div class="field required"><label><span class="term">Factor<span class="tip"><div class="tip-title">Factor de interlineado</div>Interlineado = Cuerpo × Factor.<div class="tip-indesign"><strong>InDesign:</strong> Carácter → interlineado.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="leadFactor" value="1.4" min="1" max="4" step="0.05"><span class="input-unit">×</span></div></div>
     </div>
 
-    <div class="section-title"><span class="dot" style="background:var(--cs-gutter-v)"></span><span class="term">Columnas y módulos<span class="tip"><div class="tip-title">Columnas y módulos</div>Las columnas dividen horizontalmente el área de texto. Los módulos combinan columnas con filas para la cuadrícula modular.<div class="tip-indesign"><strong>InDesign:</strong> Columnas: Maquetación → Márgenes y columnas. Módulos: Maquetación → Crear guías.</div></span></span></div>
+    <!-- COLUMNAS -->
+    <div class="section-title"><span class="dot" style="background:var(--cs-gutter-v)"></span><span class="term">Columnas y módulos<span class="tip"><div class="tip-title">Columnas y módulos</div>Columnas: divisiones verticales. Módulos: columnas × filas.<div class="tip-indesign"><strong>InDesign:</strong> Márgenes y columnas + Crear guías.</div></span></span></div>
     <div class="field-row triple">
-      <div class="field required"><label><span class="term">Columnas<span class="tip"><div class="tip-title">Número de columnas</div>Divisiones verticales del área de texto. Revistas: 3–6 cols. Libros: 1–2 cols.<div class="tip-indesign"><strong>InDesign:</strong> Maquetación → Márgenes y columnas → «Número».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numCols" value="3" min="1" max="20" step="1"><span class="input-unit">cols</span></div></div>
-      <div class="field required"><label><span class="term">Filas mód.<span class="tip"><div class="tip-title">Filas de módulos</div>Divisiones horizontales del área de texto. Valores comunes: 4, 5 o 6 filas.<div class="tip-indesign"><strong>InDesign:</strong> Maquetación → Crear guías → Filas → Número.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numRows" value="4" min="1" max="30" step="1"><span class="input-unit">filas</span></div></div>
-      <div class="field required"><label><span class="term">Intercampos<span class="tip"><div class="tip-title">Intercampos</div>Líneas base que separan un módulo del siguiente. El medianil siempre es múltiplo exacto del interlineado.<div class="tip-indesign"><strong>InDesign:</strong> Medianil = interlineado × intercampos.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="gutterLines" value="1" min="0" max="10" step="1"><span class="input-unit">lín.</span></div></div>
+      <div class="field required"><label>Columnas <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numCols" value="3" min="1" max="20" step="1"><span class="input-unit">cols</span></div></div>
+      <div class="field required"><label>Filas mód. <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numRows" value="4" min="1" max="30" step="1"><span class="input-unit">filas</span></div></div>
+      <div class="field required"><label><span class="term">Intercampos<span class="tip"><div class="tip-title">Intercampos</div>Líneas base de separación. Medianil = interlineado × intercampos.<div class="tip-indesign"><strong>InDesign:</strong> Medianil en Crear guías.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="gutterLines" value="1" min="0" max="10" step="1"><span class="input-unit">lín</span></div></div>
     </div>
+    <div class="linked-notice"><strong>⟡ Criterio:</strong> Medianil V = Medianil H = rejilla base × intercampos = <span class="val" id="gutterValDisplay">—</span> mm = <span class="val" id="gutterValPt">—</span> pt</div>
 
-    <div class="linked-notice" id="linkedNotice"><strong>⟡ Criterio de coherencia:</strong> Los <span class="term" style="font-weight:700">medianiles<span class="tip"><div class="tip-title">Medianil</div>Espacio de separación entre columnas o entre filas de módulos. En una retícula bien construida, siempre es múltiplo exacto del interlineado.<div class="tip-indesign"><strong>InDesign:</strong> Maquetación → Márgenes y columnas → «Medianil».</div></span></span> horizontales y verticales son iguales a la <strong>rejilla base</strong> × intercampos.<br>Medianil V = Medianil H = <span class="val" id="gutterValDisplay">—</span> mm = <span class="val" id="gutterValPt">—</span> pt</div>
-
-    <div class="section-title" style="margin-top:1.3rem"><span class="dot" style="background:var(--cs-margin)"></span><span class="term">Ajuste de márgenes<span class="tip"><div class="tip-title">Ajuste de márgenes</div>Cuando el alto del área de texto no es múltiplo exacto del interlineado, el sobrante se suma al margen inferior.<div class="tip-indesign"><strong>InDesign:</strong> Modificar margen inferior en Maquetación → Márgenes y columnas.</div></span></span> para rejilla exacta</div>
+    <!-- AJUSTE -->
+    <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-margin)"></span>Ajuste de márgenes</div>
     <div class="adjust-box" id="adjustBox"></div>
     <div class="adjust-result" id="adjustResult"></div>
     <button class="btn-apply" id="btnApply" style="display:none">✓ Aplicar margen inferior corregido</button>
 
-    <div class="section-title" style="margin-top:1.3rem"><span class="dot" style="background:var(--ink)"></span>Resultados calculados</div>
+    <!-- RESULTADOS -->
+    <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--ink)"></span>Resultados calculados</div>
     <div class="results-box" id="resultsBox"></div>
 
-    <div class="section-title" style="margin-top:1rem"><span class="dot" style="background:var(--ink-faint)"></span>Leyenda</div>
+    <!-- PROYECCIÓN MODULAR -->
+    <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-module)"></span>Proyección de construcción modular</div>
+    <div class="projection-box"><h4>Distribución vertical de líneas base en módulos</h4><canvas id="projectionCanvas" height="180"></canvas></div>
+
+    <!-- LEYENDA -->
+    <div class="section-title" style="margin-top:.8rem"><span class="dot" style="background:var(--ink-faint)"></span>Leyenda</div>
     <div class="legend">
       <div class="legend-item"><span class="legend-swatch" style="background:var(--cs-margin)"></span>Márgenes</div>
       <div class="legend-item"><span class="legend-swatch" style="background:var(--cs-textarea)"></span>Área texto</div>
@@ -218,17 +292,81 @@ canvas{display:block;background:#fff}
 
     <button class="info-toggle" id="infoToggle">⊕ Equivalencias tipográficas</button>
     <div class="info-panel" id="infoPanel">
-      <h4>Sistema Anglosajón (PostScript / DTP)</h4>
-      <table><tr><th>Unidad</th><th>Equivalencia</th></tr><tr><td>1 punto</td><td>1/72 in = <span class="mono">0.3528 mm</span></td></tr><tr><td>1 pica</td><td>12 puntos = <span class="mono">4.2333 mm</span></td></tr><tr><td>1 pulgada</td><td>6 picas = 72 pt = <span class="mono">25.4 mm</span></td></tr></table>
-      <h4>Sistema Francés (Didot)</h4>
-      <table><tr><th>Unidad</th><th>Equivalencia</th></tr><tr><td>1 punto Didot</td><td>≈ <span class="mono">0.3760 mm</span></td></tr><tr><td>1 cícero</td><td>12 pt Didot = <span class="mono">4.5120 mm</span></td></tr></table>
-      <h4>Conversiones</h4>
-      <table><tr><td>mm → pt anglo</td><td><span class="mono">mm ÷ 0.3528</span></td></tr><tr><td>pt anglo → mm</td><td><span class="mono">pt × 0.3528</span></td></tr><tr><td>mm → pt Didot</td><td><span class="mono">mm ÷ 0.3760</span></td></tr><tr><td>pt Didot → mm</td><td><span class="mono">pt × 0.3760</span></td></tr></table>
+      <h4>Anglosajón (PostScript)</h4>
+      <table><tr><th>Unidad</th><th>Equivalencia</th></tr><tr><td>1 punto</td><td><span class="mono">0.3528 mm</span></td></tr><tr><td>1 pica</td><td>12 pt = <span class="mono">4.2333 mm</span></td></tr><tr><td>1 pulgada</td><td>72 pt = <span class="mono">25.4 mm</span></td></tr></table>
+      <h4>Didot (Francés)</h4>
+      <table><tr><th>Unidad</th><th>Equivalencia</th></tr><tr><td>1 pt Didot</td><td><span class="mono">0.376 mm</span></td></tr><tr><td>1 cícero</td><td>12 ptD = <span class="mono">4.512 mm</span></td></tr></table>
+    </div>
+
+    <!-- ACCIONES: ENVIAR + IMPRIMIR -->
+    <div class="section-title" style="margin-top:1.2rem"><span class="dot" style="background:var(--reg-cyan)"></span>Acciones</div>
+    <div class="actions-bar">
+      <button class="action-btn send" id="btnSend" title="Enviar resultados por correo al docente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+        Enviar al docente
+      </button>
+      <button class="action-btn print" id="btnPrint" title="Imprimir PDF con instrucciones para InDesign">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir PDF / InDesign
+      </button>
+    </div>
+    <div class="validation-msg" id="validationMsg">⚠ Completa tu nombre y correo electrónico antes de enviar.</div>
+
+    <!-- INSTRUCCIONES INDESIGN (solo visible al imprimir) -->
+    <div id="printInstructions">
+      <h3>◧ Instrucciones para configurar la retícula en Adobe InDesign</h3>
+      <p style="font-style:italic;color:var(--ink-muted);margin-bottom:.8rem">
+        Usa los valores calculados de esta hoja para configurar tu documento en InDesign paso a paso.
+      </p>
+
+      <h4>Paso 1 — Crear nuevo documento</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Ir a <span class="menu-path">Archivo → Nuevo → Documento</span></span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">En <b>Anchura</b> y <b>Altura</b>, ingresar las dimensiones del formato:</span></div>
+      <div class="val-box" id="printStep1Vals"></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Activar <b>Páginas opuestas</b> si el proyecto es un libro o revista.</span></div>
+
+      <h4>Paso 2 — Configurar márgenes</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">En la misma ventana, sección <b>Márgenes</b>, ingresar:</span></div>
+      <div class="val-box" id="printStep2Vals"></div>
+      <div class="step"><span class="step-n">⚠</span><span class="step-t" style="color:var(--cs-margin)"><b>Importante:</b> Usar el margen inferior <b>ajustado</b> para que la rejilla base coincida exactamente.</span></div>
+
+      <h4>Paso 3 — Configurar columnas y medianil</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Ir a <span class="menu-path">Maquetación → Márgenes y columnas</span></span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Configurar número de columnas y medianil:</span></div>
+      <div class="val-box" id="printStep3Vals"></div>
+
+      <h4>Paso 4 — Configurar cuadrícula base</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Ir a <span class="menu-path">Edición → Preferencias → Cuadrículas</span> (Windows) o <span class="menu-path">InDesign → Preferencias → Cuadrículas</span> (Mac)</span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">En <b>Cuadrícula base</b>:</span></div>
+      <div class="val-box" id="printStep4Vals"></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Cambiar color de la cuadrícula base (recomendado: rojo o cian) para diferenciarla.</span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Para ver la cuadrícula: <span class="menu-path">Ver → Cuadrículas y guías → Mostrar cuadrícula base</span></span></div>
+
+      <h4>Paso 5 — Crear guías de módulos</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Ir a <span class="menu-path">Maquetación → Crear guías</span></span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Configurar filas y columnas de módulos:</span></div>
+      <div class="val-box" id="printStep5Vals"></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Seleccionar <b>«Ajustar a: Márgenes»</b> para que las guías respeten el área de texto.</span></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Hacer clic en <b>OK</b>. La retícula modular quedará configurada.</span></div>
+
+      <h4>Paso 6 — Verificación</h4>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Verificar en el <b>Panel de información</b> que las dimensiones de la caja tipográfica coincidan:</span></div>
+      <div class="val-box" id="printStep6Vals"></div>
+      <div class="step"><span class="step-n">▸</span><span class="step-t">Guardar como plantilla: <span class="menu-path">Archivo → Guardar como → Tipo: Plantilla de InDesign (.indt)</span></span></div>
+
+      <div style="margin-top:1.2rem;padding-top:.8rem;border-top:2px solid var(--ink);font-size:.78rem;color:var(--ink-muted)">
+        <strong style="color:var(--ink)">d3magindesign</strong> · Diagramación Editorial — Universidad Tecnológica del Perú · Mg. Mario Quiroz Martínez · 2026
+      </div>
     </div>
   </aside>
 
   <main class="preview-area" id="previewArea">
-    <div class="canvas-wrapper" id="canvasWrapper"><canvas id="gridCanvas"></canvas><div class="dim-label top" id="dimTop"></div><div class="dim-label side" id="dimSide"></div></div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <canvas id="gridCanvas"></canvas>
+      <div id="canvasTooltip"><div class="hs-title" id="hsTitle"></div><div class="hs-val" id="hsVal"></div><div class="hs-fix" id="hsFix"></div></div>
+      <div class="dim-label top" id="dimTop"></div>
+      <div class="dim-label side" id="dimSide"></div>
+    </div>
     <div class="layer-toggles">
       <label class="layer-toggle"><input type="checkbox" id="showMargins" checked> Márgenes</label>
       <label class="layer-toggle"><input type="checkbox" id="showTextArea" checked> Área texto</label>
@@ -236,6 +374,7 @@ canvas{display:block;background:#fff}
       <label class="layer-toggle"><input type="checkbox" id="showModules" checked> Cuadrícula</label>
       <label class="layer-toggle"><input type="checkbox" id="showGutterV" checked> Medianil V</label>
       <label class="layer-toggle"><input type="checkbox" id="showGutterH" checked> Medianil H</label>
+      <label class="layer-toggle"><input type="checkbox" id="showHotspots" checked> Hotspots</label>
     </div>
     <div class="zoom-controls"><button class="zoom-btn" id="zoomOut">−</button><span class="zoom-level" id="zoomLevel">100%</span><button class="zoom-btn" id="zoomIn">+</button><button class="zoom-btn" id="zoomFit">Ajustar</button></div>
   </main>
@@ -247,176 +386,191 @@ canvas{display:block;background:#fff}
 <script>
 (function(){
   'use strict';
-  const PT_ANGLO_MM=25.4/72, PT_DIDOT_MM=0.376;
+  const PT_A=25.4/72, PT_D=0.376;
   const $=id=>document.getElementById(id);
-  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH')};
+  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showHotspots:$('showHotspots')};
   const canvas=$('gridCanvas'),ctx=canvas.getContext('2d');
-  let autoZoom=true,zoomFactor=1;
+  const projCanvas=$('projectionCanvas'),projCtx=projCanvas.getContext('2d');
+  let autoZoom=true,zoomFactor=1,lastD=null;
 
-  /*
-   * FLOATING TOOLTIP SYSTEM
-   * The tooltip element (#floatingTip) lives directly on <body>,
-   * completely outside the scrollable .controls panel.
-   * This prevents any overflow:auto/hidden clipping.
-   *
-   * On mouseenter: clone the .tip content into #floatingTip,
-   * measure its real size, then position it within the viewport.
-   */
-  (function initTooltips() {
-    const tip       = document.getElementById('floatingTip');
-    const tipBody   = document.getElementById('floatingTipContent');
-    const tipArrow  = document.getElementById('floatingTipArrow');
-    const EDGE      = 14;   // px from viewport edge
-    const GAP       = 12;   // px between term and tooltip
-    let hideTimer   = null;
+  /* ── UNIT CONVERSION from mm ── */
+  const UNITS={
+    mm:    {label:'mm',     factor:1,          dec:2},
+    cm:    {label:'cm',     factor:0.1,        dec:3},
+    picas: {label:'p',      factor:1/4.23333,  dec:3},
+    'in':  {label:'in',     factor:1/25.4,     dec:4},
+    pt:    {label:'pt',     factor:1/PT_A,     dec:2},
+    ptD:   {label:'pt D',   factor:1/PT_D,     dec:2},
+    ciceros:{label:'cic',   factor:1/4.512,    dec:3},
+    agatas:{label:'ag',     factor:1/1.814,    dec:2},
+    px72:  {label:'px @72', factor:72/25.4,    dec:0},
+    px300: {label:'px @300',factor:300/25.4,   dec:0}
+  };
+  function mmTo(mm,unit){const u=UNITS[unit];return (mm*u.factor).toFixed(u.dec)+' '+u.label}
+  function ptMM(){return els.pointSystem.value==='didot'?PT_D:PT_A}
+  function ptToMM(p){return p*ptMM()}
+  function mmToPt(m){return m/ptMM()}
 
-    function show(term) {
-      // Find the inline .tip and copy its HTML
-      const src = term.querySelector('.tip');
-      if (!src) return;
-      tipBody.innerHTML = src.innerHTML;
+  /* ── UNIT TABLE ── */
+  function updateUnitTable(d){
+    const u=els.displayUnit.value;
+    const uInfo=UNITS[u];
+    const rows=[
+      ['Ancho página',d.pageW],['Alto página',d.pageH],
+      ['M. superior',d.mTop],['M. inferior (ajust.)',d.mBot],
+      ['M. interior',d.mIn],['M. exterior',d.mOut],
+      ['Área texto ancho',d.textW],['Área texto alto',d.textH],
+      ['Ancho columna',d.colW],['Alto módulo',d.moduleH_mm],
+      ['Medianil',d.gutterMM],['Interlineado',d.leadMM]
+    ];
+    let h='<table><tr><th>Medida</th><th>mm</th><th>'+uInfo.label+'</th></tr>';
+    rows.forEach(r=>{h+=`<tr><td class="u-name">${r[0]}</td><td>${r[1].toFixed(2)}</td><td>${mmTo(r[1],u)}</td></tr>`});
+    h+='</table>';
+    $('unitTable').innerHTML=h;
+  }
 
-      // Render off-screen to measure
-      tip.style.left = '-9999px';
-      tip.style.top  = '-9999px';
-      tip.classList.add('open');
-
-      // Force reflow so dimensions are computed
-      const tipW = tip.offsetWidth;
-      const tipH = tip.offsetHeight;
-
-      const tr = term.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      // ── Vertical: prefer below, fallback above, clamp ──
-      const spaceBelow = vh - tr.bottom - GAP;
-      const spaceAbove = tr.top - GAP;
-      let top;
-      let above = false;
-
-      if (spaceBelow >= tipH + EDGE) {
-        top = tr.bottom + GAP;
-      } else if (spaceAbove >= tipH + EDGE) {
-        top = tr.top - GAP - tipH;
-        above = true;
-      } else if (spaceBelow >= spaceAbove) {
-        top = vh - tipH - EDGE;
-      } else {
-        top = EDGE;
-        above = true;
-      }
-
-      // ── Horizontal: center on term, clamp to viewport ──
-      let left = tr.left + tr.width / 2 - tipW / 2;
-      if (left + tipW > vw - EDGE) left = vw - tipW - EDGE;
-      if (left < EDGE) left = EDGE;
-
-      // Final vertical clamp
-      if (top < EDGE) top = EDGE;
-      if (top + tipH > vh - EDGE) top = vh - tipH - EDGE;
-
-      // ── Arrow: point at the center of the term ──
-      const arrowX = Math.max(18, Math.min(tipW - 30,
-        tr.left + tr.width / 2 - left - 7));
-      tipArrow.style.left = arrowX + 'px';
-      if (above) {
-        tipArrow.style.top  = 'auto';
-        tipArrow.style.bottom = '-6px';
-      } else {
-        tipArrow.style.top  = '-6px';
-        tipArrow.style.bottom = 'auto';
-      }
-
-      // Apply
-      tip.style.left = Math.round(left) + 'px';
-      tip.style.top  = Math.round(top)  + 'px';
-    }
-
-    function hide() {
-      tip.classList.remove('open');
-    }
-
-    // Attach to every .term
-    document.querySelectorAll('.term').forEach(term => {
-      term.addEventListener('mouseenter', () => {
-        clearTimeout(hideTimer);
-        show(term);
-      });
-      term.addEventListener('mouseleave', () => {
-        hideTimer = setTimeout(hide, 80);
-      });
-    });
-
-    // Also hide on scroll inside controls (user scrolled away from term)
-    const ctrl = document.getElementById('controls');
-    if (ctrl) ctrl.addEventListener('scroll', hide, { passive: true });
+  /* ── FLOATING TOOLTIPS ── */
+  (function(){
+    const tip=$('floatingTip'),body=$('floatingTipContent'),arrow=$('floatingTipArrow');
+    const E=12,G=10;
+    function show(t){const src=t.querySelector('.tip');if(!src)return;body.innerHTML=src.innerHTML;tip.style.left='-9999px';tip.style.top='-9999px';tip.classList.add('open');const tw=tip.offsetWidth,th=tip.offsetHeight,r=t.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;const sb=vh-r.bottom-G,sa=r.top-G;let top,above=false;if(sb>=th+E)top=r.bottom+G;else if(sa>=th+E){top=r.top-G-th;above=true}else if(sb>=sa)top=vh-th-E;else{top=E;above=true}let left=r.left+r.width/2-tw/2;if(left+tw>vw-E)left=vw-tw-E;if(left<E)left=E;if(top<E)top=E;if(top+th>vh-E)top=vh-th-E;const ax=Math.max(16,Math.min(tw-28,r.left+r.width/2-left-6));arrow.style.left=ax+'px';if(above){arrow.style.top='auto';arrow.style.bottom='-5px'}else{arrow.style.top='-5px';arrow.style.bottom='auto'}tip.style.left=Math.round(left)+'px';tip.style.top=Math.round(top)+'px'}
+    function hide(){tip.classList.remove('open')}
+    document.querySelectorAll('.term').forEach(t=>{t.addEventListener('mouseenter',()=>show(t));t.addEventListener('mouseleave',()=>setTimeout(hide,60))});
+    const c=$('controls');if(c)c.addEventListener('scroll',hide,{passive:true});
   })();
 
   $('introCollapseBtn').addEventListener('click',()=>{const p=$('introPanel'),b=$('introCollapseBtn');p.classList.toggle('collapsed');b.textContent=p.classList.contains('collapsed')?'+':'−'});
   els.paperSize.addEventListener('change',()=>{const v=els.paperSize.value;if(v!=='custom'){const[w,h]=v.split(',').map(Number);els.pageW.value=w;els.pageH.value=h}recalc()});
 
-  function ptMM(){return els.pointSystem.value==='didot'?PT_DIDOT_MM:PT_ANGLO_MM}
-  function ptToMM(pt){return pt*ptMM()}
-  function mmToPt(mm){return mm/ptMM()}
+  /* ── HOTSPOT ZONES — computed from grid data ── */
+  let hotspots=[];
+  function buildHotspots(d,scale){
+    const s=v=>v*scale;
+    const tx=s(d.mIn),ty=s(d.mTop),tw=s(d.textW),th=s(d.textH);
+    const hs=[];
+    // Margin top
+    hs.push({x:0,y:0,w:s(d.pageW),h:ty,title:'Margen superior (Cabeza)',val:`${d.mTop.toFixed(2)} mm`,fix:''});
+    // Margin bottom
+    const botH=s(d.pageH)-ty-th;
+    hs.push({x:0,y:ty+th,w:s(d.pageW),h:botH,title:'Margen inferior (Pie)',val:`${d.mBot.toFixed(2)} mm`,fix:d.isExact?'✓ Rejilla encaja exactamente':`△ Sumar ${d.remainder.toFixed(3)} mm al margen inferior para ajustar la rejilla base`});
+    // Margin inner
+    hs.push({x:0,y:ty,w:tx,h:th,title:'Margen interior (Lomo)',val:`${d.mIn.toFixed(2)} mm`,fix:''});
+    // Margin outer
+    hs.push({x:tx+tw,y:ty,w:s(d.pageW)-tx-tw,h:th,title:'Margen exterior (Corte)',val:`${d.mOut.toFixed(2)} mm`,fix:''});
+    // Text area
+    hs.push({x:tx,y:ty,w:tw,h:th,title:'Área de texto (Mancha)',val:`${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm`,fix:`${d.totalLines} líneas base · ${d.nCols} cols × ${d.nRows} filas = ${d.nCols*d.nRows} módulos`});
+    // Each column
+    for(let i=0;i<d.nCols;i++){
+      const cx=tx+i*(s(d.colW)+s(d.gutterMM));
+      hs.push({x:cx,y:ty,w:s(d.colW),h:th,title:`Columna ${i+1}`,val:`Ancho: ${d.colW.toFixed(2)} mm = ${mmToPt(d.colW).toFixed(1)} pt`,fix:`${d.linesPerModule} líneas/módulo × ${d.nRows} filas`});
+    }
+    // Vertical gutters
+    if(d.nCols>1&&d.gutterMM>0){for(let i=1;i<d.nCols;i++){
+      const gx=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);
+      hs.push({x:gx,y:ty,w:s(d.gutterMM),h:th,title:`Medianil vertical ${i}`,val:`${d.gutterMM.toFixed(3)} mm = ${d.gutterLineCount} lín. base`,fix:'Medianil = interlineado × intercampos'});
+    }}
+    // Horizontal gutters
+    if(d.nRows>1&&d.gutterMM>0&&d.linesPerModule>0){for(let i=1;i<d.nRows;i++){
+      const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;
+      const gy=ty+lb*s(d.leadMM);
+      hs.push({x:tx,y:gy,w:tw,h:d.gutterLineCount*s(d.leadMM),title:`Medianil horizontal ${i}`,val:`${d.gutterMM.toFixed(3)} mm = ${d.gutterLineCount} lín. base`,fix:'Coincide con la rejilla base'});
+    }}
+    hotspots=hs;
+  }
 
+  /* ── CANVAS MOUSE → HOTSPOT TOOLTIP ── */
+  const cTip=$('canvasTooltip');
+  canvas.addEventListener('mousemove',e=>{
+    if(!els.showHotspots.checked){cTip.classList.remove('show');return}
+    const rect=canvas.getBoundingClientRect();
+    const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+    // Check hotspots in reverse (top-most first)
+    let found=null;
+    for(let i=hotspots.length-1;i>=0;i--){
+      const h=hotspots[i];
+      if(mx>=h.x&&mx<=h.x+h.w&&my>=h.y&&my<=h.y+h.h){found=h;break}
+    }
+    if(found){
+      $('hsTitle').textContent=found.title;
+      $('hsVal').textContent=found.val;
+      $('hsFix').textContent=found.fix;
+      $('hsFix').style.display=found.fix?'block':'none';
+      let tx=mx+14,ty=my-10;
+      const cw=parseInt(canvas.style.width),ch=parseInt(canvas.style.height);
+      if(tx+240>cw)tx=mx-254;
+      if(ty+100>ch)ty=my-100;
+      if(tx<4)tx=4;if(ty<4)ty=4;
+      cTip.style.left=tx+'px';cTip.style.top=ty+'px';
+      cTip.classList.add('show');
+    }else{cTip.classList.remove('show')}
+  });
+  canvas.addEventListener('mouseleave',()=>cTip.classList.remove('show'));
+
+  /* ══════════════════════════════════════
+     MAIN RECALC
+     ══════════════════════════════════════ */
   function recalc(){
     const pageW=parseFloat(els.pageW.value)||210,pageH=parseFloat(els.pageH.value)||297;
     const mTop=parseFloat(els.mTop.value)||0,mBot=parseFloat(els.mBottom.value)||0;
     const mIn=parseFloat(els.mInner.value)||0,mOut=parseFloat(els.mOuter.value)||0;
     const nCols=Math.max(1,parseInt(els.numCols.value)||1),nRows=Math.max(1,parseInt(els.numRows.value)||1);
-    const gutterLineCount=Math.max(0,parseInt(els.gutterLines.value)||0);
+    const gLC=Math.max(0,parseInt(els.gutterLines.value)||0);
     const bodyPt=parseFloat(els.bodyPt.value)||10,leadF=parseFloat(els.leadFactor.value)||1.2;
     const leadPt=bodyPt*leadF,leadMM=ptToMM(leadPt),bodyMM=ptToMM(bodyPt);
-    const gutterMM=leadMM*(gutterLineCount>0?gutterLineCount:1);
-    const gutterPt=leadPt*(gutterLineCount>0?gutterLineCount:1);
-    $('gutterValDisplay').textContent=gutterMM.toFixed(3);
-    $('gutterValPt').textContent=gutterPt.toFixed(2);
+    const gutMM=leadMM*(gLC>0?gLC:1),gutPt=leadPt*(gLC>0?gLC:1);
+    $('gutterValDisplay').textContent=gutMM.toFixed(3);$('gutterValPt').textContent=gutPt.toFixed(2);
     const textW=Math.max(0,pageW-mIn-mOut),textH=Math.max(0,pageH-mTop-mBot);
-    const totalLines=leadMM>0?Math.floor(textH/leadMM):0;
-    const remainder=leadMM>0?textH-(totalLines*leadMM):0;
-    const mBotAdj=mBot+remainder,textHAdj=textH-remainder;
-    const isExact=Math.abs(remainder)<0.001;
-    const lFG=(nRows-1)*gutterLineCount,lFM=totalLines-lFG;
-    const lPM=lFM>0?Math.floor(lFM/nRows):0,mRem=lFM>0?lFM%nRows:0;
+    const tL=leadMM>0?Math.floor(textH/leadMM):0;
+    const rem=leadMM>0?textH-tL*leadMM:0;
+    const mBA=mBot+rem,tHA=textH-rem,isEx=Math.abs(rem)<.001;
+    const lFG=(nRows-1)*gLC,lFM=tL-lFG;
+    const lPM=lFM>0?Math.floor(lFM/nRows):0,mR=lFM>0?lFM%nRows:0;
     const modH=lPM*leadMM;
-    const colW=nCols>1?(textW-(nCols-1)*gutterMM)/nCols:textW;
-    const sN=els.pointSystem.value==='didot'?'Didot':'Anglosajón';
+    const colW=nCols>1?(textW-(nCols-1)*gutMM)/nCols:textW;
+    const sN=els.pointSystem.value==='didot'?'Didot':'Anglo';
 
-    $('adjustBox').innerHTML=`<h4>⊕ Procedimiento de ajuste</h4>
-      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto área de texto: <span class="mono">${pageH.toFixed(2)} mm</span> − (<span class="mono">${mTop.toFixed(2)} mm</span> + <span class="mono">${mBot.toFixed(2)} mm</span>) = <span class="mono">${textH.toFixed(3)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interlineado: <span class="mono">${bodyPt} pt</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} pt</span> = <span class="mono">${leadMM.toFixed(4)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas base: <span class="mono">${textH.toFixed(3)} mm</span> ÷ <span class="mono">${leadMM.toFixed(4)} mm</span> = <span class="mono">${(textH/leadMM).toFixed(4)}</span> → <span class="mono">${totalLines} líneas</span> enteras</span></div>
-      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${textH.toFixed(3)} mm</span> − (<span class="mono">${totalLines} lín.</span> × <span class="mono">${leadMM.toFixed(4)} mm</span>) = <span class="mono">${remainder.toFixed(4)} mm</span></span></div>
-      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">Margen inf. corregido: <span class="mono">${mBot.toFixed(2)} mm</span> + <span class="mono">${remainder.toFixed(4)} mm</span> = <span class="mono">${mBotAdj.toFixed(4)} mm</span></span></div>`;
+    // Adjust box
+    $('adjustBox').innerHTML=`<h4>⊕ Procedimiento</h4>
+      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto texto: <span class="mono">${pageH.toFixed(2)} mm</span> − (<span class="mono">${mTop.toFixed(2)}</span> + <span class="mono">${mBot.toFixed(2)}</span>) = <span class="mono">${textH.toFixed(3)} mm</span></span></div>
+      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interl.: <span class="mono">${bodyPt} pt</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} pt</span> = <span class="mono">${leadMM.toFixed(4)} mm</span></span></div>
+      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas: <span class="mono">${textH.toFixed(3)}</span> ÷ <span class="mono">${leadMM.toFixed(4)}</span> = <span class="mono">${(textH/leadMM).toFixed(3)}</span> → <span class="mono">${tL} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${rem.toFixed(4)} mm</span></span></div>
+      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">M. inf. corregido: <span class="mono">${mBot.toFixed(2)}</span> + <span class="mono">${rem.toFixed(4)}</span> = <span class="mono">${mBA.toFixed(4)} mm</span></span></div>`;
+    if(isEx){$('adjustResult').innerHTML=`<strong>✓ Rejilla exacta.</strong> ${tL} líneas en ${tHA.toFixed(2)} mm.`;$('btnApply').style.display='none'}
+    else{$('adjustResult').innerHTML=`<strong>△ Ajuste:</strong> M. inferior de <strong style="color:var(--ink)">${mBot.toFixed(2)} mm</strong> → <strong>${mBA.toFixed(3)} mm</strong> (+${rem.toFixed(3)} mm). ${tL} líneas exactas.`;$('btnApply').style.display='inline-flex'}
 
-    if(isExact){$('adjustResult').innerHTML=`<strong>✓ ¡Rejilla exacta!</strong> Las ${totalLines} líneas base encajan perfectamente en ${textHAdj.toFixed(2)} mm. No se requiere ajuste.`;$('btnApply').style.display='none'}
-    else{$('adjustResult').innerHTML=`<strong>△ Ajuste necesario:</strong> Cambiar margen inferior de <strong style="color:var(--ink)">${mBot.toFixed(2)} mm</strong> a <strong>${mBotAdj.toFixed(3)} mm</strong> (sumar <strong>${remainder.toFixed(3)} mm</strong>). Así las <strong>${totalLines} líneas</strong> coincidirán exactamente.`;$('btnApply').style.display='inline-flex'}
-
-    let mN='';if(mRem>0)mN=` (sobran ${mRem} lín.)`;
+    let mN='';if(mR>0)mN=` (sobran ${mR} lín.)`;
     const wC=colW<=0?' warn':'';
     $('resultsBox').innerHTML=`
-      <div class="result-line"><span class="result-label">Área de texto</span><span class="result-value">${textW.toFixed(2)} mm × ${textHAdj.toFixed(2)} mm</span></div>
-      <div class="result-line"><span class="result-label">Área texto (${sN})</span><span class="result-value">${mmToPt(textW).toFixed(1)} pt × ${mmToPt(textHAdj).toFixed(1)} pt</span></div>
+      <div class="result-line"><span class="result-label">Área de texto</span><span class="result-value">${textW.toFixed(2)} × ${tHA.toFixed(2)} mm</span></div>
+      <div class="result-line"><span class="result-label">Área texto (${sN})</span><span class="result-value">${mmToPt(textW).toFixed(1)} × ${mmToPt(tHA).toFixed(1)} pt</span></div>
       <div class="result-line"><span class="result-label">Ancho columna</span><span class="result-value${wC}">${colW.toFixed(2)} mm = ${mmToPt(colW).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">Cuerpo tipográfico</span><span class="result-value">${bodyPt} pt = ${bodyMM.toFixed(3)} mm</span></div>
+      <div class="result-line"><span class="result-label">Cuerpo</span><span class="result-value">${bodyPt} pt = ${bodyMM.toFixed(3)} mm</span></div>
       <div class="result-line"><span class="result-label">Interlineado</span><span class="result-value">${leadPt.toFixed(2)} pt = ${leadMM.toFixed(3)} mm</span></div>
-      <div class="result-line"><span class="result-label">Medianil (V = H)</span><span class="result-value">${gutterMM.toFixed(3)} mm = ${gutterPt.toFixed(2)} pt (${gutterLineCount} lín.)</span></div>
-      <div class="result-line"><span class="result-label">Líneas base totales</span><span class="result-value ${isExact?'ok':'warn'}">${totalLines} líneas</span></div>
-      <div class="result-line"><span class="result-label">Módulos (cols × filas)</span><span class="result-value">${nCols} cols × ${nRows} filas = ${nCols*nRows} módulos</span></div>
-      <div class="result-line"><span class="result-label">Líneas por módulo</span><span class="result-value">${lPM} líneas${mN}</span></div>
+      <div class="result-line"><span class="result-label">Medianil (V=H)</span><span class="result-value">${gutMM.toFixed(3)} mm = ${gutPt.toFixed(2)} pt</span></div>
+      <div class="result-line"><span class="result-label">Líneas base</span><span class="result-value ${isEx?'ok':'warn'}">${tL} líneas</span></div>
+      <div class="result-line"><span class="result-label">Módulos</span><span class="result-value">${nCols}×${nRows} = ${nCols*nRows}</span></div>
+      <div class="result-line"><span class="result-label">Lín./módulo</span><span class="result-value">${lPM} lín.${mN}</span></div>
       <div class="result-line"><span class="result-label">Alto módulo</span><span class="result-value">${modH.toFixed(3)} mm = ${mmToPt(modH).toFixed(2)} pt</span></div>
       <div class="result-line"><span class="result-label">Ancho módulo</span><span class="result-value">${colW.toFixed(2)} mm = ${mmToPt(colW).toFixed(1)} pt</span></div>
       <div class="result-line"><span class="result-label">1 pt (${sN})</span><span class="result-value">${ptMM().toFixed(4)} mm</span></div>`;
 
-    drawGrid({pageW,pageH,mTop,mBot:mBotAdj,mBotOriginal:mBot,mIn,mOut,textW,textH:textHAdj,nCols,nRows,gutterMM,gutterLineCount,colW,leadMM,totalLines,linesPerModule:lPM,moduleH_mm:modH,remainder,isExact});
+    const d={pageW,pageH,mTop,mBot:mBA,mBotOrig:mBot,mIn,mOut,textW,textH:tHA,nCols,nRows,gutterMM:gutMM,gutterLineCount:gLC,colW,leadMM,totalLines:tL,linesPerModule:lPM,moduleH_mm:modH,remainder:rem,isExact:isEx};
+    lastD=d;
+    drawGrid(d);
+    drawProjection(d);
+    updateUnitTable(d);
+    updatePrintInstructions(d);
     $('dimTop').textContent=`${pageW.toFixed(1)} mm`;$('dimSide').textContent=`${pageH.toFixed(1)} mm`;
   }
 
   $('btnApply').addEventListener('click',()=>{const pH=parseFloat(els.pageH.value)||297,mT=parseFloat(els.mTop.value)||0,mB=parseFloat(els.mBottom.value)||0,bP=parseFloat(els.bodyPt.value)||10,lF=parseFloat(els.leadFactor.value)||1.2;const lMM=ptToMM(bP*lF),tH=pH-mT-mB,li=Math.floor(tH/lMM),rm=tH-li*lMM;els.mBottom.value=(mB+rm).toFixed(3);recalc()});
 
+  /* ══════════════════════════════════════
+     GRID DRAWING + HOTSPOTS
+     ══════════════════════════════════════ */
   function drawGrid(d){
-    const pv=$('previewArea'),mxW=pv.clientWidth-160,mxH=pv.clientHeight-160;
+    const pv=$('previewArea'),mxW=pv.clientWidth-140,mxH=pv.clientHeight-140;
     let sc;if(autoZoom){sc=Math.min(mxW/d.pageW,mxH/d.pageH,5);zoomFactor=sc}else{sc=zoomFactor}
     const cw=Math.round(d.pageW*sc),ch=Math.round(d.pageH*sc),dpr=window.devicePixelRatio||1;
     canvas.width=cw*dpr;canvas.height=ch*dpr;canvas.style.width=cw+'px';canvas.style.height=ch+'px';
@@ -425,22 +579,261 @@ canvas{display:block;background:#fff}
     const s=v=>v*sc;ctx.fillStyle='#fff';ctx.fillRect(0,0,cw,ch);
     const tx=s(d.mIn),ty=s(d.mTop),tw=s(d.textW),th=s(d.textH);
 
-    if(els.showTextArea.checked){ctx.fillStyle='rgba(255,250,235,.40)';ctx.fillRect(tx,ty,tw,th)}
-    if(els.showGutterV.checked&&d.nCols>1&&d.gutterMM>0){ctx.fillStyle='rgba(30,160,80,.25)';for(let i=1;i<d.nCols;i++){const gx=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);ctx.fillRect(gx,ty,s(d.gutterMM),th)}}
-    if(els.showGutterH.checked&&d.nRows>1&&d.gutterMM>0&&d.linesPerModule>0){ctx.fillStyle='rgba(232,168,32,.30)';for(let i=1;i<d.nRows;i++){const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;ctx.fillRect(tx,ty+lb*s(d.leadMM),tw,d.gutterLineCount*s(d.leadMM))}}
-    if(els.showModules.checked&&d.linesPerModule>0){ctx.strokeStyle='rgba(120,115,100,.35)';ctx.lineWidth=.8;ctx.setLineDash([4,3]);for(let i=0;i<=d.nRows;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+tw,ty);ctx.stroke()}else{const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;if(i<d.nRows&&d.gutterLineCount>0){const yB=ty+(i*d.linesPerModule+(i-1)*d.gutterLineCount)*s(d.leadMM);ctx.beginPath();ctx.moveTo(tx,yB);ctx.lineTo(tx+tw,yB);ctx.stroke();const yT=yB+d.gutterLineCount*s(d.leadMM);ctx.beginPath();ctx.moveTo(tx,yT);ctx.lineTo(tx+tw,yT);ctx.stroke()}else{const y=ty+lb*s(d.leadMM);ctx.beginPath();ctx.moveTo(tx,y);ctx.lineTo(tx+tw,y);ctx.stroke()}}}for(let i=0;i<=d.nCols;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx,ty+th);ctx.stroke()}else if(i===d.nCols){ctx.beginPath();ctx.moveTo(tx+tw,ty);ctx.lineTo(tx+tw,ty+th);ctx.stroke()}else{const xR=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);ctx.beginPath();ctx.moveTo(xR,ty);ctx.lineTo(xR,ty+th);ctx.stroke();const xL=xR+s(d.gutterMM);ctx.beginPath();ctx.moveTo(xL,ty);ctx.lineTo(xL,ty+th);ctx.stroke()}}ctx.setLineDash([])}
+    if(els.showTextArea.checked){ctx.fillStyle='rgba(255,250,235,.4)';ctx.fillRect(tx,ty,tw,th)}
+    if(els.showGutterV.checked&&d.nCols>1&&d.gutterMM>0){ctx.fillStyle='rgba(30,160,80,.25)';for(let i=1;i<d.nCols;i++){ctx.fillRect(tx+i*s(d.colW)+(i-1)*s(d.gutterMM),ty,s(d.gutterMM),th)}}
+    if(els.showGutterH.checked&&d.nRows>1&&d.gutterMM>0&&d.linesPerModule>0){ctx.fillStyle='rgba(232,168,32,.3)';for(let i=1;i<d.nRows;i++){const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;ctx.fillRect(tx,ty+lb*s(d.leadMM),tw,d.gutterLineCount*s(d.leadMM))}}
+    if(els.showModules.checked&&d.linesPerModule>0){ctx.strokeStyle='rgba(120,115,100,.35)';ctx.lineWidth=.8;ctx.setLineDash([4,3]);for(let i=0;i<=d.nRows;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+tw,ty);ctx.stroke()}else{const lb=i*d.linesPerModule+(i-1)*d.gutterLineCount;if(i<d.nRows&&d.gutterLineCount>0){const yB=ty+(i*d.linesPerModule+(i-1)*d.gutterLineCount)*s(d.leadMM);ctx.beginPath();ctx.moveTo(tx,yB);ctx.lineTo(tx+tw,yB);ctx.stroke();ctx.beginPath();ctx.moveTo(tx,yB+d.gutterLineCount*s(d.leadMM));ctx.lineTo(tx+tw,yB+d.gutterLineCount*s(d.leadMM));ctx.stroke()}else{ctx.beginPath();ctx.moveTo(tx,ty+lb*s(d.leadMM));ctx.lineTo(tx+tw,ty+lb*s(d.leadMM));ctx.stroke()}}}for(let i=0;i<=d.nCols;i++){if(i===0){ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx,ty+th);ctx.stroke()}else if(i===d.nCols){ctx.beginPath();ctx.moveTo(tx+tw,ty);ctx.lineTo(tx+tw,ty+th);ctx.stroke()}else{const xR=tx+i*s(d.colW)+(i-1)*s(d.gutterMM);ctx.beginPath();ctx.moveTo(xR,ty);ctx.lineTo(xR,ty+th);ctx.stroke();ctx.beginPath();ctx.moveTo(xR+s(d.gutterMM),ty);ctx.lineTo(xR+s(d.gutterMM),ty+th);ctx.stroke()}}ctx.setLineDash([])}
     if(els.showBaseline.checked&&d.leadMM>0){ctx.strokeStyle='rgba(0,151,215,.22)';ctx.lineWidth=.5;for(let i=0;i<=d.totalLines;i++){const y=ty+i*s(d.leadMM);if(y>ty+th+.5)break;ctx.beginPath();ctx.moveTo(tx,y);ctx.lineTo(tx+tw,y);ctx.stroke()}}
-    if(els.showMargins.checked){ctx.fillStyle='rgba(212,46,107,.04)';ctx.fillRect(0,0,cw,ty);ctx.fillRect(0,ty+th,cw,ch-ty-th);ctx.fillRect(0,ty,tx,th);ctx.fillRect(tx+tw,ty,cw-tx-tw,th);ctx.strokeStyle='rgba(28,26,23,.25)';ctx.lineWidth=1;ctx.strokeRect(.5,.5,cw-1,ch-1);ctx.strokeStyle='rgba(212,46,107,.45)';ctx.lineWidth=1;ctx.setLineDash([6,4]);ctx.strokeRect(tx,ty,tw,th);ctx.setLineDash([]);if(!d.isExact){const rH=s(d.remainder);ctx.fillStyle='rgba(212,46,107,.12)';ctx.fillRect(tx,ty+th,tw,rH);if(rH>8){ctx.fillStyle='rgba(212,46,107,.6)';ctx.font=`${Math.max(9,Math.min(13,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`+${d.remainder.toFixed(2)} mm`,tx+tw/2,ty+th+rH/2)}}ctx.fillStyle='rgba(180,40,80,.55)';ctx.font=`${Math.max(9,Math.min(14,sc*3.2))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';if(s(d.mTop)>18)ctx.fillText(`${d.mTop.toFixed(1)} mm`,cw/2,ty/2);if(s(d.mBot)>18)ctx.fillText(`${d.mBot.toFixed(1)} mm`,cw/2,ty+th+(ch-ty-th)/2);if(s(d.mIn)>18){ctx.save();ctx.translate(tx/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mIn.toFixed(1)} mm`,0,0);ctx.restore()}if(s(d.mOut)>18){ctx.save();ctx.translate(tx+tw+(cw-tx-tw)/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mOut.toFixed(1)} mm`,0,0);ctx.restore()}}
-    if(els.showGutterV.checked||els.showModules.checked){ctx.strokeStyle='rgba(30,160,80,.40)';ctx.lineWidth=.7;for(let i=0;i<d.nCols;i++){const cx=tx+i*(s(d.colW)+s(d.gutterMM));ctx.strokeRect(cx,ty,s(d.colW),th)}}
-    ctx.strokeStyle='rgba(28,26,23,.2)';ctx.lineWidth=.6;const cm=8;ctx.beginPath();ctx.moveTo(-cm,0);ctx.lineTo(-3,0);ctx.stroke();ctx.beginPath();ctx.moveTo(0,-cm);ctx.lineTo(0,-3);ctx.stroke();ctx.beginPath();ctx.moveTo(cw+3,0);ctx.lineTo(cw+cm,0);ctx.stroke();ctx.beginPath();ctx.moveTo(cw,-cm);ctx.lineTo(cw,-3);ctx.stroke();ctx.beginPath();ctx.moveTo(-cm,ch);ctx.lineTo(-3,ch);ctx.stroke();ctx.beginPath();ctx.moveTo(0,ch+3);ctx.lineTo(0,ch+cm);ctx.stroke();ctx.beginPath();ctx.moveTo(cw+3,ch);ctx.lineTo(cw+cm,ch);ctx.stroke();ctx.beginPath();ctx.moveTo(cw,ch+3);ctx.lineTo(cw,ch+cm);ctx.stroke()
+    if(els.showMargins.checked){ctx.fillStyle='rgba(212,46,107,.04)';ctx.fillRect(0,0,cw,ty);ctx.fillRect(0,ty+th,cw,ch-ty-th);ctx.fillRect(0,ty,tx,th);ctx.fillRect(tx+tw,ty,cw-tx-tw,th);ctx.strokeStyle='rgba(28,26,23,.25)';ctx.lineWidth=1;ctx.strokeRect(.5,.5,cw-1,ch-1);ctx.strokeStyle='rgba(212,46,107,.45)';ctx.setLineDash([6,4]);ctx.strokeRect(tx,ty,tw,th);ctx.setLineDash([]);if(!d.isExact){const rH=s(d.remainder);ctx.fillStyle='rgba(212,46,107,.12)';ctx.fillRect(tx,ty+th,tw,rH);if(rH>8){ctx.fillStyle='rgba(212,46,107,.6)';ctx.font=`${Math.max(8,Math.min(12,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(`+${d.remainder.toFixed(2)} mm`,tx+tw/2,ty+th+rH/2)}}ctx.fillStyle='rgba(180,40,80,.5)';ctx.font=`${Math.max(8,Math.min(13,sc*3))}px "JetBrains Mono",monospace`;ctx.textAlign='center';ctx.textBaseline='middle';if(s(d.mTop)>16)ctx.fillText(`${d.mTop.toFixed(1)} mm`,cw/2,ty/2);if(s(d.mBot)>16)ctx.fillText(`${d.mBot.toFixed(1)} mm`,cw/2,ty+th+(ch-ty-th)/2);if(s(d.mIn)>16){ctx.save();ctx.translate(tx/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mIn.toFixed(1)} mm`,0,0);ctx.restore()}if(s(d.mOut)>16){ctx.save();ctx.translate(tx+tw+(cw-tx-tw)/2,ch/2);ctx.rotate(-Math.PI/2);ctx.fillText(`${d.mOut.toFixed(1)} mm`,0,0);ctx.restore()}}
+    if(els.showGutterV.checked||els.showModules.checked){ctx.strokeStyle='rgba(30,160,80,.4)';ctx.lineWidth=.7;for(let i=0;i<d.nCols;i++){ctx.strokeRect(tx+i*(s(d.colW)+s(d.gutterMM)),ty,s(d.colW),th)}}
+    // Crop marks
+    ctx.strokeStyle='rgba(28,26,23,.18)';ctx.lineWidth=.6;const cm=8;[[0,0,-1,0],[0,0,0,-1],[cw,0,1,0],[cw,0,0,-1],[0,ch,-1,0],[0,ch,0,1],[cw,ch,1,0],[cw,ch,0,1]].forEach(([x,y,dx,dy])=>{ctx.beginPath();ctx.moveTo(x+dx*3,y+dy*3);ctx.lineTo(x+dx*cm,y+dy*cm);ctx.stroke()});
+
+    // Build hotspots for mouse interaction
+    buildHotspots(d,sc);
+
+    // Draw hotspot indicators (small dots)
+    if(els.showHotspots.checked){
+      ctx.fillStyle='rgba(0,151,215,.5)';
+      const dotR=Math.max(2.5,Math.min(4,sc*1));
+      // Dot at center of each margin
+      if(s(d.mTop)>10){ctx.beginPath();ctx.arc(cw/2,ty/2,dotR,0,Math.PI*2);ctx.fill()}
+      if(s(d.mBot)>10){ctx.beginPath();ctx.arc(cw/2,ty+th+(ch-ty-th)/2,dotR,0,Math.PI*2);ctx.fill()}
+      if(s(d.mIn)>10){ctx.beginPath();ctx.arc(tx/2,ch/2,dotR,0,Math.PI*2);ctx.fill()}
+      if(s(d.mOut)>10){ctx.beginPath();ctx.arc(tx+tw+(cw-tx-tw)/2,ch/2,dotR,0,Math.PI*2);ctx.fill()}
+      // Dot at center of text area
+      ctx.fillStyle='rgba(0,151,215,.35)';
+      ctx.beginPath();ctx.arc(tx+tw/2,ty+th/2,dotR*1.5,0,Math.PI*2);ctx.fill();
+    }
   }
 
+  /* ══════════════════════════════════════
+     MODULE PROJECTION DIAGRAM
+     — shows how lines distribute into modules
+     ══════════════════════════════════════ */
+  function drawProjection(d){
+    const W=projCanvas.parentElement.clientWidth-14;
+    projCanvas.width=W*2;projCanvas.height=180*2;
+    projCanvas.style.width=W+'px';projCanvas.style.height='180px';
+    projCtx.setTransform(2,0,0,2,0,0);
+    projCtx.clearRect(0,0,W,180);
+
+    if(d.linesPerModule<=0||d.totalLines<=0)return;
+
+    const PAD=10,LBL_W=45,BAR_X=LBL_W+PAD;
+    const barW=W-BAR_X-PAD;
+    const totalH=160;
+    const lineH=Math.min(totalH/d.totalLines,8);
+    const usedH=d.totalLines*lineH;
+    const startY=(180-usedH)/2;
+
+    let y=startY,modIdx=0,lineInMod=0;
+    const colors=['rgba(0,151,215,.18)','rgba(0,151,215,.10)'];
+    const gutColor='rgba(232,168,32,.25)';
+
+    // Draw lines and module blocks
+    for(let i=0;i<d.totalLines;i++){
+      // Determine if this line is part of a gutter
+      const modLines=d.linesPerModule;
+      const gutLines=d.gutterLineCount;
+      // Compute module/gutter assignment
+      let inGutter=false;
+      if(modLines>0&&gutLines>0){
+        const cycleLen=modLines+gutLines;
+        const totalModLines=d.nRows*modLines+(d.nRows-1)*gutLines;
+        if(i<totalModLines){
+          const posInCycle=i<d.nRows*modLines+(d.nRows-1)*gutLines?-1:0;
+          // Simpler: track with counters
+        }
+      }
+
+      // Use simpler tracking
+      let isGut=false,currentMod=0,cl=0,pos=0;
+      for(let j=0;j<=i;j++){
+        if(cl>=d.linesPerModule&&d.gutterLineCount>0&&currentMod<d.nRows-1){
+          // In gutter zone
+          if(j>=pos+d.linesPerModule&&j<pos+d.linesPerModule+d.gutterLineCount){
+            if(j===i)isGut=true;
+          }
+        }
+      }
+      // Actually let's just compute which module/gutter each line belongs to
+    }
+
+    // Cleaner approach: draw module blocks
+    let yPos=startY;
+    for(let m=0;m<d.nRows;m++){
+      const blockH=d.linesPerModule*lineH;
+      // Module block
+      projCtx.fillStyle=colors[m%2];
+      projCtx.fillRect(BAR_X,yPos,barW,blockH);
+      projCtx.strokeStyle='rgba(0,151,215,.3)';projCtx.lineWidth=.5;
+      // Draw individual lines in module
+      for(let l=0;l<d.linesPerModule;l++){
+        const ly=yPos+l*lineH;
+        projCtx.beginPath();projCtx.moveTo(BAR_X,ly);projCtx.lineTo(BAR_X+barW,ly);projCtx.stroke();
+      }
+      // Module border
+      projCtx.strokeStyle='rgba(0,0,0,.15)';projCtx.lineWidth=1;
+      projCtx.strokeRect(BAR_X,yPos,barW,blockH);
+
+      // Label
+      projCtx.fillStyle='#3a3630';
+      projCtx.font='600 9px "DM Sans",sans-serif';
+      projCtx.textAlign='right';projCtx.textBaseline='middle';
+      projCtx.fillText(`Mód ${m+1}`,BAR_X-5,yPos+blockH/2);
+
+      // Lines count inside
+      projCtx.fillStyle='rgba(0,151,215,.6)';
+      projCtx.font='600 8px "JetBrains Mono",monospace';
+      projCtx.textAlign='center';
+      projCtx.fillText(`${d.linesPerModule} lín.`,BAR_X+barW/2,yPos+blockH/2);
+
+      yPos+=blockH;
+
+      // Gutter between modules
+      if(m<d.nRows-1&&d.gutterLineCount>0){
+        const gH=d.gutterLineCount*lineH;
+        projCtx.fillStyle=gutColor;
+        projCtx.fillRect(BAR_X,yPos,barW,gH);
+        projCtx.fillStyle='rgba(232,168,32,.7)';
+        projCtx.font='500 7px "JetBrains Mono",monospace';
+        projCtx.textAlign='center';projCtx.textBaseline='middle';
+        if(gH>6)projCtx.fillText(`${d.gutterLineCount} lín.`,BAR_X+barW/2,yPos+gH/2);
+        yPos+=gH;
+      }
+    }
+
+    // Remainder lines
+    const usedLines=d.nRows*d.linesPerModule+(d.nRows-1)*d.gutterLineCount;
+    const remLines=d.totalLines-usedLines;
+    if(remLines>0){
+      const rH=remLines*lineH;
+      projCtx.fillStyle='rgba(212,46,107,.12)';
+      projCtx.fillRect(BAR_X,yPos,barW,rH);
+      projCtx.strokeStyle='rgba(212,46,107,.3)';projCtx.lineWidth=1;
+      projCtx.strokeRect(BAR_X,yPos,barW,rH);
+      projCtx.fillStyle='rgba(212,46,107,.7)';
+      projCtx.font='500 7px "JetBrains Mono",monospace';
+      projCtx.textAlign='center';projCtx.textBaseline='middle';
+      projCtx.fillText(`+${remLines} lín. sobrantes`,BAR_X+barW/2,yPos+rH/2);
+    }
+
+    // Right side: total summary
+    projCtx.fillStyle='#7c7669';
+    projCtx.font='500 8px "DM Sans",sans-serif';
+    projCtx.textAlign='left';projCtx.textBaseline='top';
+    const sumX=BAR_X+barW+6,sumY=startY;
+    // Only if space allows
+    if(W-BAR_X-barW>40){
+      projCtx.fillText(`Total:`,sumX,sumY);
+      projCtx.fillText(`${d.totalLines} lín.`,sumX,sumY+12);
+    }
+
+    // Brace on left showing total height
+    projCtx.strokeStyle='#b0a998';projCtx.lineWidth=.8;
+    const braceX=3;
+    projCtx.beginPath();
+    projCtx.moveTo(braceX+6,startY);
+    projCtx.lineTo(braceX,startY);
+    projCtx.lineTo(braceX,yPos);
+    projCtx.lineTo(braceX+6,yPos);
+    projCtx.stroke();
+    projCtx.fillStyle='#7c7669';projCtx.font='500 7px "JetBrains Mono",monospace';
+    projCtx.textAlign='center';projCtx.textBaseline='middle';
+    projCtx.save();projCtx.translate(braceX+2,(startY+yPos)/2);projCtx.rotate(-Math.PI/2);
+    projCtx.fillText(`${d.totalLines} líneas base`,0,0);
+    projCtx.restore();
+  }
+
+  /* ══════════════════════════════════════
+     PRINT INSTRUCTIONS — populate values
+     ══════════════════════════════════════ */
+  function updatePrintInstructions(d){
+    const sN=els.pointSystem.value==='didot'?'Didot':'Anglosajón';
+    const sU=els.pointSystem.value==='didot'?'pt Didot':'pt';
+    $('printStep1Vals').innerHTML=`Anchura: <b>${d.pageW.toFixed(2)} mm</b> (${mmToPt(d.pageW).toFixed(1)} ${sU})<br>Altura: <b>${d.pageH.toFixed(2)} mm</b> (${mmToPt(d.pageH).toFixed(1)} ${sU})`;
+    $('printStep2Vals').innerHTML=`Superior (Cabeza): <b>${d.mTop.toFixed(2)} mm</b> (${mmToPt(d.mTop).toFixed(1)} ${sU})<br>Inferior (Pie) ajustado: <b>${d.mBot.toFixed(3)} mm</b> (${mmToPt(d.mBot).toFixed(2)} ${sU})<br>Interior (Lomo): <b>${d.mIn.toFixed(2)} mm</b> (${mmToPt(d.mIn).toFixed(1)} ${sU})<br>Exterior (Corte): <b>${d.mOut.toFixed(2)} mm</b> (${mmToPt(d.mOut).toFixed(1)} ${sU})`;
+    $('printStep3Vals').innerHTML=`Número de columnas: <b>${d.nCols}</b><br>Medianil: <b>${d.gutterMM.toFixed(3)} mm</b> (${mmToPt(d.gutterMM).toFixed(2)} ${sU})`;
+    $('printStep4Vals').innerHTML=`Inicio: <b>${d.mTop.toFixed(2)} mm</b> (= margen superior)<br>Incremento cada: <b>${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} ${sU}</b> = <b>${d.leadMM.toFixed(4)} mm</b> (= interlineado)`;
+    $('printStep5Vals').innerHTML=`Filas: <b>${d.nRows}</b> — Medianil de filas: <b>${d.gutterMM.toFixed(3)} mm</b> (${mmToPt(d.gutterMM).toFixed(2)} ${sU})<br>Columnas: <b>${d.nCols}</b> — Medianil de columnas: <b>${d.gutterMM.toFixed(3)} mm</b>`;
+    $('printStep6Vals').innerHTML=`Área de texto: <b>${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm</b><br>Ancho columna: <b>${d.colW.toFixed(2)} mm</b> (${mmToPt(d.colW).toFixed(1)} ${sU})<br>Líneas base: <b>${d.totalLines} líneas</b><br>Módulos: <b>${d.nCols} × ${d.nRows} = ${d.nCols*d.nRows}</b><br>Líneas por módulo: <b>${d.linesPerModule}</b><br>Alto módulo: <b>${d.moduleH_mm.toFixed(3)} mm</b>`;
+  }
+
+  /* ══════════════════════════════════════
+     SEND EMAIL — mailto with hidden teacher address
+     ══════════════════════════════════════ */
+  $('btnSend').addEventListener('click',()=>{
+    const name=($('studentName').value||'').trim();
+    const email=($('studentEmail').value||'').trim();
+    const vMsg=$('validationMsg');
+    if(!name||!email||!email.includes('@')){vMsg.classList.add('show');return}
+    vMsg.classList.remove('show');
+
+    if(!lastD)return;
+    const d=lastD;
+    const sN=els.pointSystem.value==='didot'?'Didot':'Anglo';
+    const subject=encodeURIComponent(`Retícula Editorial — ${name}`);
+    const bodyLines=[
+      `CALCULADORA DE RETÍCULA EDITORIAL`,
+      `Diagramación Editorial — UTP 2026`,
+      `Docente: Mg. Mario Quiroz Martínez`,
+      ``,
+      `ESTUDIANTE: ${name}`,
+      `CORREO: ${email}`,
+      ``,
+      `═══ PARÁMETROS ═══`,
+      `Formato: ${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm`,
+      `Sistema: ${sN}`,
+      `Cuerpo: ${parseFloat(els.bodyPt.value)} pt | Factor: ${parseFloat(els.leadFactor.value)}×`,
+      `Interlineado: ${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} pt = ${d.leadMM.toFixed(4)} mm`,
+      ``,
+      `═══ MÁRGENES ═══`,
+      `Superior: ${d.mTop.toFixed(2)} mm`,
+      `Inferior (ajustado): ${d.mBot.toFixed(3)} mm`,
+      `Interior: ${d.mIn.toFixed(2)} mm`,
+      `Exterior: ${d.mOut.toFixed(2)} mm`,
+      ``,
+      `═══ ESTRUCTURA ═══`,
+      `Columnas: ${d.nCols} | Filas módulos: ${d.nRows}`,
+      `Medianil (V=H): ${d.gutterMM.toFixed(3)} mm (${d.gutterLineCount} lín. base)`,
+      `Área de texto: ${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm`,
+      `Ancho columna: ${d.colW.toFixed(2)} mm`,
+      `Líneas base: ${d.totalLines}`,
+      `Líneas/módulo: ${d.linesPerModule}`,
+      `Alto módulo: ${d.moduleH_mm.toFixed(3)} mm`,
+      `Rejilla: ${d.isExact?'✓ Exacta':'△ Requiere ajuste margen inferior'}`,
+      ``,
+      `═══ CONFIGURACIÓN INDESIGN ═══`,
+      `Nuevo documento: ${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm`,
+      `Márgenes: Sup=${d.mTop.toFixed(2)} Inf=${d.mBot.toFixed(3)} Int=${d.mIn.toFixed(2)} Ext=${d.mOut.toFixed(2)} mm`,
+      `Columnas: ${d.nCols}, Medianil: ${d.gutterMM.toFixed(3)} mm`,
+      `Cuadrícula base: Inicio=${d.mTop.toFixed(2)} mm, Incremento=${d.leadMM.toFixed(4)} mm`,
+      `Crear guías: ${d.nRows} filas × ${d.nCols} cols, Medianil=${d.gutterMM.toFixed(3)} mm`,
+      ``,
+      `— Generado con Calculadora de Retícula Editorial · d3magindesign`
+    ];
+    const body=encodeURIComponent(bodyLines.join('\n'));
+    // Hidden teacher email + CC to student
+    const teacherEmail='c12139'+'@'+'utp.edu.pe';
+    const mailto=`mailto:${teacherEmail}?cc=${encodeURIComponent(email)}&subject=${subject}&body=${body}`;
+    window.location.href=mailto;
+  });
+
+  /* ══════════════════════════════════════
+     PRINT PDF — opens print dialog with InDesign instructions visible
+     ══════════════════════════════════════ */
+  $('btnPrint').addEventListener('click',()=>{
+    window.print();
+  });
+
+  /* ── EVENTS ── */
   $('zoomIn').addEventListener('click',()=>{autoZoom=false;zoomFactor*=1.2;recalc()});
   $('zoomOut').addEventListener('click',()=>{autoZoom=false;zoomFactor/=1.2;recalc()});
   $('zoomFit').addEventListener('click',()=>{autoZoom=true;recalc()});
-  $('infoToggle').addEventListener('click',()=>{$('infoPanel').classList.toggle('open')});
+  $('infoToggle').addEventListener('click',()=>$('infoPanel').classList.toggle('open'));
   document.querySelectorAll('#controls input[type="number"],#controls select').forEach(el=>{el.addEventListener('input',recalc);el.addEventListener('change',recalc)});
-  [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH].forEach(el=>el.addEventListener('change',recalc));
+  [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH,els.showHotspots].forEach(el=>el.addEventListener('change',recalc));
   let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{if(autoZoom)recalc()},80)});
   recalc();
 })();
