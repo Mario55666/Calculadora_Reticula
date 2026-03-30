@@ -107,6 +107,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper-deep);color:var(--i
 .mod-opt-btn:hover{background:var(--cs-module);color:#fff}
 .mod-opt-btn.current{background:var(--cs-gutter-v);border-color:var(--cs-gutter-v);color:#fff;cursor:default}
 
+/* MODULE MANUAL INPUT */
+.mod-manual{display:flex;gap:.5rem;margin-top:.5rem;align-items:flex-end;flex-wrap:wrap}
+.mod-manual .field{flex:1;min-width:100px}
+.mod-manual .field input{font-size:.92rem}
+.mod-manual .field.error input{border-color:var(--cs-margin);background:rgba(212,46,107,.04)}
+.mod-manual .field.error label{color:var(--cs-margin)}
+.mod-manual-check{display:inline-flex;align-items:center;gap:.25rem;padding:.38rem .7rem;border:1.5px solid var(--cs-module);border-radius:3px;background:rgba(120,115,100,.06);color:var(--cs-module);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;align-self:flex-end}
+.mod-manual-check:hover{background:var(--cs-module);color:#fff}
+.mod-verify{margin-top:.35rem;font-size:.8rem;padding:.4rem .65rem;border-radius:var(--radius);line-height:1.55}
+.mod-verify.ok{background:rgba(30,160,80,.08);border:1.5px solid rgba(30,160,80,.2);color:var(--ink-soft)}
+.mod-verify.ok strong{color:var(--cs-gutter-v)}
+.mod-verify.err{background:rgba(212,46,107,.06);border:1.5px solid rgba(212,46,107,.25);color:var(--ink-soft)}
+.mod-verify.err strong{color:var(--cs-margin)}
+
+/* MARGIN UNIT SELECTOR */
+.margin-unit-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.margin-unit-row label{font-size:.72rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.margin-unit-row select{flex:1;padding:.3rem .4rem;border:1.5px solid var(--paper-dark);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.82rem;background:#fff;color:var(--ink)}
+.margin-mm-readout{font-size:.72rem;color:var(--ink-muted);font-family:'JetBrains Mono',monospace;margin-top:.15rem}
+
 /* RESULTS */
 .results-box{background:#fff;border:var(--border);border-radius:var(--radius);padding:.7rem .85rem;margin-top:.6rem}
 .result-line{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px dotted var(--paper-dark);align-items:baseline;gap:.4rem}
@@ -192,6 +212,9 @@ canvas{display:block;background:#fff}
   .projection-box{page-break-inside:avoid}
   .results-box,.adjust-box,.adjust-result,.unit-table,.linked-notice,.mod-adjust-box,.mod-adjust-result{page-break-inside:avoid}
   .mod-options{display:none !important}
+  .mod-manual{display:none !important}
+  .mod-verify{page-break-inside:avoid}
+  .margin-mm-readout{display:none !important}
   .section-title{margin-top:.6rem}
   #printInstructions{display:block !important;page-break-before:always}
 }
@@ -253,13 +276,15 @@ canvas{display:block;background:#fff}
     <div class="unit-table" id="unitTable"></div>
 
     <!-- MÁRGENES -->
-    <div class="section-title"><span class="dot" style="background:var(--cs-margin)"></span><span class="term">Márgenes<span class="tip"><div class="tip-title">Márgenes</div>Distancias entre borde de página y área de texto.<div class="tip-indesign"><strong>InDesign:</strong> Márgenes en Nuevo documento o Maquetación → Márgenes y columnas.</div></span></span></div>
+    <div class="section-title"><span class="dot" style="background:var(--cs-margin)"></span><span class="term">Márgenes<span class="tip"><div class="tip-title">Márgenes</div>Distancias entre borde de página y área de texto. Puedes ingresar en cualquier unidad tipográfica.<div class="tip-indesign"><strong>InDesign:</strong> Márgenes en Nuevo documento o Maquetación → Márgenes y columnas.</div></span></span></div>
+    <div class="margin-unit-row"><label>Unidad de márgenes</label><select id="marginUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglosajones (pt)</option><option value="ptD">Puntos Didot (ptD)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi</option><option value="px300">Píxeles 300 dpi</option></select></div>
     <div class="field-row quad">
-      <div class="field required"><label><span class="term">Superior<span class="tip"><div class="tip-title">Margen superior (Cabeza)</div>Del borde superior a la primera línea.<div class="tip-indesign"><strong>InDesign:</strong> Superior (Top).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mTop" value="20" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Inferior<span class="tip"><div class="tip-title">Margen inferior (Pie)</div>De la última línea al borde inferior. <strong>Se ajusta</strong> para rejilla exacta.<div class="tip-indesign"><strong>InDesign:</strong> Inferior (Bottom).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mBottom" value="25" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Interior<span class="tip"><div class="tip-title">Margen interior (Lomo)</div>Del lomo al texto.<div class="tip-indesign"><strong>InDesign:</strong> Interior (Inside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mInner" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
-      <div class="field required"><label><span class="term">Exterior<span class="tip"><div class="tip-title">Margen exterior (Corte)</div>Del texto al borde exterior.<div class="tip-indesign"><strong>InDesign:</strong> Exterior (Outside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mOuter" value="15" min="0" max="300" step="0.1"><span class="input-unit">mm</span></div></div>
+      <div class="field required"><label><span class="term">Superior<span class="tip"><div class="tip-title">Margen superior (Cabeza)</div>Del borde superior a la primera línea.<div class="tip-indesign"><strong>InDesign:</strong> Superior (Top).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mTop" value="20" min="0" max="9999" step="0.01"><span class="input-unit" id="mUnitTop">mm</span></div></div>
+      <div class="field required"><label><span class="term">Inferior<span class="tip"><div class="tip-title">Margen inferior (Pie)</div>De la última línea al borde inferior. <strong>Se ajusta</strong> para rejilla exacta.<div class="tip-indesign"><strong>InDesign:</strong> Inferior (Bottom).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mBottom" value="25" min="0" max="9999" step="0.01"><span class="input-unit" id="mUnitBot">mm</span></div></div>
+      <div class="field required"><label><span class="term">Interior<span class="tip"><div class="tip-title">Margen interior (Lomo)</div>Del lomo al texto.<div class="tip-indesign"><strong>InDesign:</strong> Interior (Inside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mInner" value="15" min="0" max="9999" step="0.01"><span class="input-unit" id="mUnitIn">mm</span></div></div>
+      <div class="field required"><label><span class="term">Exterior<span class="tip"><div class="tip-title">Margen exterior (Corte)</div>Del texto al borde exterior.<div class="tip-indesign"><strong>InDesign:</strong> Exterior (Outside).</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="mOuter" value="15" min="0" max="9999" step="0.01"><span class="input-unit" id="mUnitOut">mm</span></div></div>
     </div>
+    <div class="margin-mm-readout" id="marginMmReadout" style="display:none"></div>
 
     <!-- TIPOGRAFÍA -->
     <div class="section-title"><span class="dot" style="background:var(--cs-baseline)"></span><span class="term">Tipografía y línea base<span class="tip"><div class="tip-title">Tipografía y línea base</div>Cuerpo e interlineado definen la rejilla base (baseline grid).<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Cuadrículas → Inicio e Incremento.</div></span></span></div>
@@ -287,6 +312,12 @@ canvas{display:block;background:#fff}
     <!-- AJUSTE DE MÓDULOS -->
     <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-module)"></span>Ajuste de módulos</div>
     <div class="mod-adjust-box" id="modAdjustBox"></div>
+    <div class="mod-manual">
+      <div class="field" id="modManualRowsField"><label>Filas deseadas</label><div class="input-wrap"><input type="number" id="modManualRows" value="" min="1" max="30" step="1" placeholder="ej: 4"><span class="input-unit">filas</span></div></div>
+      <div class="field" id="modManualLinesField"><label>Líneas/módulo</label><div class="input-wrap"><input type="number" id="modManualLines" value="" min="1" max="200" step="1" placeholder="ej: 12"><span class="input-unit">lín.</span></div></div>
+      <button class="mod-manual-check" id="modManualCheck">⊕ Verificar</button>
+    </div>
+    <div class="mod-verify" id="modVerify" style="display:none"></div>
     <div class="mod-adjust-result" id="modAdjustResult"></div>
     <div class="mod-options" id="modOptions"></div>
 
@@ -408,7 +439,7 @@ canvas{display:block;background:#fff}
   'use strict';
   const PT_A=25.4/72, PT_D=0.376;
   const $=id=>document.getElementById(id);
-  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),dimUnit:$('dimUnit'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showLineNums:$('showLineNums'),showHotspots:$('showHotspots')};
+  const els={paperSize:$('paperSize'),pageW:$('pageW'),pageH:$('pageH'),dimUnit:$('dimUnit'),marginUnit:$('marginUnit'),mTop:$('mTop'),mBottom:$('mBottom'),mInner:$('mInner'),mOuter:$('mOuter'),numCols:$('numCols'),numRows:$('numRows'),gutterLines:$('gutterLines'),pointSystem:$('pointSystem'),bodyPt:$('bodyPt'),leadFactor:$('leadFactor'),displayUnit:$('displayUnit'),showMargins:$('showMargins'),showTextArea:$('showTextArea'),showBaseline:$('showBaseline'),showModules:$('showModules'),showGutterV:$('showGutterV'),showGutterH:$('showGutterH'),showLineNums:$('showLineNums'),showHotspots:$('showHotspots')};
   const canvas=$('gridCanvas'),ctx=canvas.getContext('2d');
   const projCanvas=$('projectionCanvas'),projCtx=projCanvas.getContext('2d');
   let autoZoom=true,zoomFactor=1,lastD=null;
@@ -554,6 +585,128 @@ canvas{display:block;background:#fff}
   els.pageW.addEventListener('input', updateDimReadout);
   els.pageH.addEventListener('input', updateDimReadout);
 
+  /* ── MARGIN UNIT SYSTEM ── */
+  let prevMarginUnit = 'mm';
+  const marginFields = [els.mTop, els.mBottom, els.mInner, els.mOuter];
+  const marginUnitEls = [$('mUnitTop'), $('mUnitBot'), $('mUnitIn'), $('mUnitOut')];
+
+  function marginToMM(val) {
+    const f = dimFactor(els.marginUnit.value);
+    return f !== 0 ? val / f : val;
+  }
+  function mmToMarginVal(mm) {
+    return mm * dimFactor(els.marginUnit.value);
+  }
+  function updateMarginLabels() {
+    const lbl = dimLabel(els.marginUnit.value);
+    marginUnitEls.forEach(el => { if(el) el.textContent = lbl; });
+  }
+  function updateMarginReadout() {
+    const u = els.marginUnit.value;
+    const rd = $('marginMmReadout');
+    if (u === 'mm') { rd.style.display = 'none'; return; }
+    const vals = marginFields.map(f => marginToMM(parseFloat(f.value) || 0));
+    rd.style.display = 'block';
+    rd.textContent = `≡ Sup: ${vals[0].toFixed(2)} mm · Inf: ${vals[1].toFixed(2)} mm · Int: ${vals[2].toFixed(2)} mm · Ext: ${vals[3].toFixed(2)} mm`;
+  }
+
+  els.marginUnit.addEventListener('change', () => {
+    const oldU = prevMarginUnit, newU = els.marginUnit.value;
+    const dec = dimDec(newU);
+    marginFields.forEach(f => {
+      const oldVal = parseFloat(f.value) || 0;
+      const mm = oldU === 'mm' ? oldVal : (dimFactor(oldU) !== 0 ? oldVal / dimFactor(oldU) : oldVal);
+      f.value = (mm * dimFactor(newU)).toFixed(dec);
+      f.step = dec >= 3 ? '0.001' : dec >= 2 ? '0.01' : '0.1';
+    });
+    prevMarginUnit = newU;
+    updateMarginLabels();
+    updateMarginReadout();
+    recalc();
+  });
+  marginFields.forEach(f => f.addEventListener('input', updateMarginReadout));
+
+  /* ── MODULE MANUAL VERIFICATION ── */
+  $('modManualCheck').addEventListener('click', verifyModuleManual);
+  $('modManualRows').addEventListener('input', verifyModuleManual);
+  $('modManualLines').addEventListener('input', verifyModuleManual);
+
+  function verifyModuleManual() {
+    const mRows = parseInt($('modManualRows').value) || 0;
+    const mLines = parseInt($('modManualLines').value) || 0;
+    const vBox = $('modVerify');
+    const fRows = $('modManualRowsField');
+    const fLines = $('modManualLinesField');
+
+    fRows.classList.remove('error');
+    fLines.classList.remove('error');
+
+    if (mRows <= 0 && mLines <= 0) { vBox.style.display = 'none'; return; }
+    if (!lastD) { vBox.style.display = 'none'; return; }
+
+    vBox.style.display = 'block';
+    const d = lastD;
+    const gLC = parseInt(els.gutterLines.value) || 0;
+    const totalLines = d.totalLines;
+
+    // If only rows entered, calculate lines per module
+    if (mRows > 0 && mLines <= 0) {
+      const gutLines = (mRows - 1) * gLC;
+      const avail = totalLines - gutLines;
+      if (avail <= 0) {
+        fRows.classList.add('error');
+        vBox.className = 'mod-verify err';
+        vBox.innerHTML = `<strong>✗ Error:</strong> ${mRows} filas con ${gLC} intercampos requieren ${gutLines} líneas solo para separaciones, pero solo hay ${totalLines} líneas totales.`;
+        return;
+      }
+      const lpm = Math.floor(avail / mRows);
+      const rem = avail % mRows;
+      if (rem === 0) {
+        vBox.className = 'mod-verify ok';
+        vBox.innerHTML = `<strong>✓ Válido:</strong> ${mRows} filas × ${lpm} lín./módulo + ${gutLines} lín. intercampos = ${totalLines} líneas. Cada módulo: ${fmtD(lpm * d.leadMM)} de alto.`;
+      } else {
+        fRows.classList.add('error');
+        vBox.className = 'mod-verify err';
+        vBox.innerHTML = `<strong>✗ No exacto:</strong> ${avail} lín. ÷ ${mRows} filas = ${lpm} lín./mód + <strong>${rem} sobrantes</strong>. Prueba con ${mRows - 1 > 0 ? mRows - 1 : ''} o ${mRows + 1} filas, o cambia los intercampos.`;
+      }
+      return;
+    }
+
+    // If only lines entered, calculate how many rows fit
+    if (mLines > 0 && mRows <= 0) {
+      // rows × mLines + (rows-1) × gLC = totalLines → rows(mLines+gLC) - gLC = totalLines
+      const cycle = mLines + gLC;
+      const rowsCalc = (totalLines + gLC) / cycle;
+      if (Number.isInteger(rowsCalc) && rowsCalc > 0) {
+        vBox.className = 'mod-verify ok';
+        vBox.innerHTML = `<strong>✓ Válido:</strong> Con ${mLines} lín./módulo caben exactamente <strong>${rowsCalc} filas</strong> (${rowsCalc}×${mLines} + ${rowsCalc - 1}×${gLC} = ${totalLines}).`;
+      } else {
+        fLines.classList.add('error');
+        const nearRows = Math.floor(rowsCalc);
+        vBox.className = 'mod-verify err';
+        vBox.innerHTML = `<strong>✗ No exacto:</strong> ${mLines} lín./módulo con ${gLC} intercampos no divide exactamente ${totalLines} líneas. Filas aprox.: ${rowsCalc.toFixed(2)} (no entero).`;
+      }
+      return;
+    }
+
+    // Both entered: full verification
+    if (mRows > 0 && mLines > 0) {
+      const needed = mRows * mLines + (mRows - 1) * gLC;
+      if (needed === totalLines) {
+        vBox.className = 'mod-verify ok';
+        vBox.innerHTML = `<strong>✓ ¡Perfecto!</strong> ${mRows} filas × ${mLines} lín. + ${(mRows-1)*gLC} lín. intercampos = ${needed} = ${totalLines} líneas totales. Módulo: ${fmtD(mLines * d.leadMM)} alto × ${fmtD(d.colW)} ancho.`;
+        fRows.classList.remove('error');
+        fLines.classList.remove('error');
+      } else {
+        vBox.className = 'mod-verify err';
+        const diff = needed - totalLines;
+        fRows.classList.add('error');
+        fLines.classList.add('error');
+        vBox.innerHTML = `<strong>✗ No coincide:</strong> ${mRows}×${mLines} + ${(mRows-1)*gLC} intercampos = <strong>${needed} líneas</strong>, pero la rejilla tiene <strong>${totalLines} líneas</strong> (diferencia: ${diff > 0 ? '+' : ''}${diff} lín.).`;
+      }
+    }
+  }
+
   /* ── HOTSPOT ZONES — computed from grid data ── */
   let hotspots=[];
   function buildHotspots(d,scale){
@@ -625,8 +778,8 @@ canvas{display:block;background:#fff}
     // Page dimensions: read in current display unit, convert to mm
     const pageW=dimToMM(parseFloat(els.pageW.value)||0);
     const pageH=dimToMM(parseFloat(els.pageH.value)||0);
-    const mTop=parseFloat(els.mTop.value)||0,mBot=parseFloat(els.mBottom.value)||0;
-    const mIn=parseFloat(els.mInner.value)||0,mOut=parseFloat(els.mOuter.value)||0;
+    const mTop=marginToMM(parseFloat(els.mTop.value)||0),mBot=marginToMM(parseFloat(els.mBottom.value)||0);
+    const mIn=marginToMM(parseFloat(els.mInner.value)||0),mOut=marginToMM(parseFloat(els.mOuter.value)||0);
     const nCols=Math.max(1,parseInt(els.numCols.value)||1),nRows=Math.max(1,parseInt(els.numRows.value)||1);
     const gLC=Math.max(0,parseInt(els.gutterLines.value)||0);
     const bodyPt=parseFloat(els.bodyPt.value)||10,leadF=parseFloat(els.leadFactor.value)||1.2;
@@ -733,10 +886,24 @@ canvas{display:block;background:#fff}
     drawProjection(d);
     updateUnitTable(d);
     updatePrintInstructions(d);
+    verifyModuleManual();
     $('dimTop').textContent=fmtD(pageW);$('dimSide').textContent=fmtD(pageH);
   }
 
-  $('btnApply').addEventListener('click',()=>{const pH=parseFloat(els.pageH.value)||297,mT=parseFloat(els.mTop.value)||0,mB=parseFloat(els.mBottom.value)||0,bP=parseFloat(els.bodyPt.value)||10,lF=parseFloat(els.leadFactor.value)||1.2;const lMM=ptToMM(bP*lF),tH=pH-mT-mB,li=Math.floor(tH/lMM),rm=tH-li*lMM;els.mBottom.value=(mB+rm).toFixed(3);recalc()});
+  $('btnApply').addEventListener('click',()=>{
+    const pH=dimToMM(parseFloat(els.pageH.value)||0);
+    const mT=marginToMM(parseFloat(els.mTop.value)||0);
+    const mB=marginToMM(parseFloat(els.mBottom.value)||0);
+    const bP=parseFloat(els.bodyPt.value)||10,lF=parseFloat(els.leadFactor.value)||1.2;
+    const lMM=ptToMM(bP*lF),tH=pH-mT-mB;
+    const li=Math.floor(tH/lMM),rm=tH-li*lMM;
+    const newBotMM=mB+rm;
+    // Write back in current margin unit
+    const dec=dimDec(els.marginUnit.value);
+    els.mBottom.value=(newBotMM*dimFactor(els.marginUnit.value)).toFixed(dec);
+    updateMarginReadout();
+    recalc();
+  });
 
   /* ══════════════════════════════════════
      GRID DRAWING + HOTSPOTS
@@ -1047,6 +1214,7 @@ canvas{display:block;background:#fff}
   [els.showMargins,els.showTextArea,els.showBaseline,els.showModules,els.showGutterV,els.showGutterH,els.showLineNums,els.showHotspots].forEach(el=>el.addEventListener('change',recalc));
   let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{if(autoZoom)recalc()},80)});
   updateDimLabels();
+  updateMarginLabels();
   recalc();
 })();
 </script>
