@@ -71,6 +71,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper-deep);color:var(--i
 .field select{font-family:'DM Sans',sans-serif;font-size:.85rem}
 .field input:focus,.field select:focus{outline:none;border-color:var(--reg-cyan);box-shadow:0 0 0 2px rgba(0,151,215,.12)}
 
+/* POINT CONVERSION NOTICE */
+.pt-notice{background:linear-gradient(135deg,rgba(232,168,32,.08),rgba(0,151,215,.06));border:1.5px solid rgba(232,168,32,.3);border-left:4px solid var(--reg-yellow);border-radius:var(--radius);padding:.6rem .75rem;margin-top:.4rem;font-size:.78rem;line-height:1.6;color:var(--ink-soft);display:none}
+.pt-notice.show{display:block}
+.pt-notice .pt-icon{font-size:.9rem;margin-right:.15rem}
+.pt-notice strong{color:var(--reg-yellow);font-weight:700}
+.pt-notice .pt-val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.82rem}
+.pt-notice .pt-recommend{margin-top:.3rem;padding-top:.3rem;border-top:1px solid rgba(232,168,32,.15);font-size:.76rem;color:var(--ink-muted)}
+.pt-notice .pt-recommend b{color:var(--reg-cyan);font-weight:700}
+
+/* SYNC NOTICE */
+.sync-notice{background:rgba(0,151,215,.06);border:1px solid rgba(0,151,215,.15);border-radius:var(--radius);padding:.35rem .55rem;margin-top:.3rem;font-size:.72rem;color:var(--ink-muted);display:none;align-items:center;gap:.25rem}
+.sync-notice.show{display:flex}
+.sync-notice .sync-icon{color:var(--reg-cyan);font-weight:700}
+
 /* UNIT CONVERTER TABLE */
 .unit-table{margin-top:.5rem;background:#fff;border:var(--border);border-radius:var(--radius);overflow:hidden}
 .unit-table table{width:100%;border-collapse:collapse;font-size:.76rem}
@@ -266,13 +280,18 @@ canvas{display:block;background:#fff}
     <div class="field-row triple">
       <div class="field required"><label><span class="term">Ancho<span class="tip"><div class="tip-title">Ancho de página</div>Dimensión horizontal del formato. Se ingresa en la unidad seleccionada y se convierte internamente a milímetros.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Anchura».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageW" value="210" min="0" max="99999" step="0.01"><span class="input-unit" id="dimUnitW">mm</span></div></div>
       <div class="field required"><label><span class="term">Alto<span class="tip"><div class="tip-title">Alto de página</div>Dimensión vertical del formato. Se ingresa en la unidad seleccionada.<div class="tip-indesign"><strong>InDesign:</strong> Campo «Altura».</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="pageH" value="297" min="0" max="99999" step="0.01"><span class="input-unit" id="dimUnitH">mm</span></div></div>
-      <div class="field"><label><span class="term">Unidad<span class="tip"><div class="tip-title">Unidad de medida de formato</div>Selecciona la unidad para ingresar las dimensiones del papel. Los valores se convierten automáticamente. Al cambiar de unidad, las medidas actuales se reconvierten a la nueva unidad sin alterar el tamaño real de la página.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos → Horizontal / Vertical. Puedes usar mm, picas, pulgadas, etc.</div></span></span></label><select id="dimUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglo (pt)</option><option value="ptD">Puntos Didot (ptD)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi</option><option value="px300">Píxeles 300 dpi</option></select></div>
+      <div class="field"><label><span class="term">Unidad<span class="tip"><div class="tip-title">Unidad de medida de formato</div>Selecciona la unidad para ingresar las dimensiones del papel. Al cambiar esta unidad, <strong>todas las unidades</strong> (formato, márgenes y visualización) se sincronizan automáticamente. Si seleccionas mm, cm o pulgadas, los valores se convierten internamente a puntos tipográficos para mayor precisión en el cálculo de la retícula.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos → Horizontal / Vertical. Se recomienda usar puntos tipográficos para la retícula editorial.</div></span></span></label><select id="dimUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglo (pt)</option><option value="ptD">Puntos Didot (ptD)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi</option><option value="px300">Píxeles 300 dpi</option></select></div>
     </div>
     <div id="dimMmReadout" style="font-size:.74rem;color:var(--ink-muted);margin-top:.1rem;font-family:'JetBrains Mono',monospace;display:none"></div>
 
     <!-- UNIDAD DE VISUALIZACIÓN -->
-    <div class="section-title"><span class="dot" style="background:var(--reg-yellow)"></span><span class="term">Unidad de visualización<span class="tip"><div class="tip-title">Unidades de medida</div>Selecciona la unidad para ver las dimensiones convertidas: milímetros, centímetros, picas, pulgadas, puntos, cíceros, ágatas o píxeles (a 72 y 300 dpi).<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos.</div></span></span></div>
+    <div class="section-title"><span class="dot" style="background:var(--reg-yellow)"></span><span class="term">Unidad de visualización<span class="tip"><div class="tip-title">Unidades de medida</div>Selecciona la unidad para ver las dimensiones convertidas. <strong>Recomendación:</strong> Usa puntos tipográficos (pt o pt Didot) para optimizar la precisión del cálculo de la retícula. Al seleccionar mm, cm o pulgadas, los valores se convierten internamente a puntos para el cálculo y luego se reconvierten.<div class="tip-indesign"><strong>InDesign:</strong> Preferencias → Unidades e incrementos. Se recomienda usar puntos para la rejilla base.</div></span></span></div>
     <div class="field-row single"><div class="field"><label>Mostrar equivalencias en</label><select id="displayUnit"><option value="mm" selected>Milímetros (mm)</option><option value="cm">Centímetros (cm)</option><option value="picas">Picas (p)</option><option value="in">Pulgadas (in)</option><option value="pt">Puntos anglosajones (pt)</option><option value="ptD">Puntos Didot (pt D)</option><option value="ciceros">Cíceros (cic)</option><option value="agatas">Ágatas (ag)</option><option value="px72">Píxeles 72 dpi (px)</option><option value="px300">Píxeles 300 dpi (px)</option></select></div></div>
+    <div class="pt-notice" id="ptConvNotice">
+      <span class="pt-icon">⊕</span> <strong>Conversión a puntos tipográficos:</strong> Las medidas ingresadas en <span class="pt-val" id="ptConvFrom">mm</span> se convierten internamente a <span class="pt-val" id="ptConvTo">puntos anglosajones</span> para el cálculo de la retícula. Los resultados se muestran en puntos y se reconvierten a <span class="pt-val" id="ptConvBack">mm</span>.
+      <div class="pt-recommend"><b>⟡ Recomendación:</b> Para optimizar la precisión del cálculo de la retícula editorial, se recomienda trabajar directamente en <b>puntos tipográficos</b> (pt o pt Didot) como unidad de medida principal. Esto evita errores de redondeo en las conversiones.</div>
+    </div>
+    <div class="sync-notice" id="syncNotice"><span class="sync-icon">⟲</span> Las unidades de formato, márgenes y visualización están sincronizadas.</div>
     <div class="unit-table" id="unitTable"></div>
 
     <!-- MÁRGENES -->
@@ -301,7 +320,7 @@ canvas{display:block;background:#fff}
       <div class="field required"><label>Filas mód. <span class="req">*</span></label><div class="input-wrap"><input type="number" id="numRows" value="4" min="1" max="30" step="1"><span class="input-unit">filas</span></div></div>
       <div class="field required"><label><span class="term">Intercampos<span class="tip"><div class="tip-title">Intercampos</div>Líneas base de separación. Medianil = interlineado × intercampos.<div class="tip-indesign"><strong>InDesign:</strong> Medianil en Crear guías.</div></span></span> <span class="req">*</span></label><div class="input-wrap"><input type="number" id="gutterLines" value="1" min="0" max="10" step="1"><span class="input-unit">lín</span></div></div>
     </div>
-    <div class="linked-notice"><strong>⟡ Criterio:</strong> Medianil V = Medianil H = rejilla base × intercampos = <span class="val" id="gutterValDisplay">—</span> = <span class="val" id="gutterValPt">—</span> pt</div>
+    <div class="linked-notice"><strong>⟡ Criterio:</strong> Medianil V = Medianil H = rejilla base × intercampos = <span class="val" id="gutterValDisplay">—</span> = <span class="val" id="gutterValPt">—</span> <span id="gutterPtLabel">pt</span></div>
 
     <!-- AJUSTE -->
     <div class="section-title" style="margin-top:1.1rem"><span class="dot" style="background:var(--cs-margin)"></span>Ajuste de márgenes</div>
@@ -466,6 +485,8 @@ canvas{display:block;background:#fff}
   function updateUnitTable(d){
     const u=els.displayUnit.value;
     const uInfo=UNITS[u];
+    const ptSys=els.pointSystem.value==='didot'?'pt D':'pt';
+    const isPointU=(u==='pt'||u==='ptD'||u==='ciceros'||u==='picas');
     const rows=[
       ['Ancho página',d.pageW],['Alto página',d.pageH],
       ['M. superior',d.mTop],['M. inferior (ajust.)',d.mBot],
@@ -474,8 +495,14 @@ canvas{display:block;background:#fff}
       ['Ancho columna',d.colW],['Alto módulo',d.moduleH_mm],
       ['Medianil',d.gutterMM],['Interlineado',d.leadMM]
     ];
-    let h='<table><tr><th>Medida</th><th>mm</th><th>'+uInfo.label+'</th></tr>';
-    rows.forEach(r=>{h+=`<tr><td class="u-name">${r[0]}</td><td>${r[1].toFixed(2)}</td><td>${mmTo(r[1],u)}</td></tr>`});
+    let h='<table><tr><th>Medida</th><th>'+ptSys+'</th>';
+    if(!isPointU) h+='<th>'+uInfo.label+'</th>';
+    h+='<th>mm</th></tr>';
+    rows.forEach(r=>{
+      h+=`<tr><td class="u-name">${r[0]}</td><td>${mmToPt(r[1]).toFixed(2)}</td>`;
+      if(!isPointU) h+=`<td>${mmTo(r[1],u)}</td>`;
+      h+=`<td>${r[1].toFixed(2)}</td></tr>`;
+    });
     h+='</table>';
     $('unitTable').innerHTML=h;
   }
@@ -528,6 +555,29 @@ canvas{display:block;background:#fff}
     return v.toFixed(dimDec(u)) + ' ' + dimLabel(u);
   }
 
+  /* Format a mm value as points first, then user unit */
+  function fmtPt(mm) {
+    const ptVal = mmToPt(mm);
+    const sU = els.pointSystem.value === 'didot' ? 'pt D' : 'pt';
+    return ptVal.toFixed(2) + ' ' + sU;
+  }
+
+  /* Format: points → user unit (dual display) */
+  function fmtDual(mm) {
+    const u = els.dimUnit.value;
+    const isPointUnit = (u === 'pt' || u === 'ptD' || u === 'ciceros' || u === 'picas');
+    if (isPointUnit) return fmtD(mm);
+    return fmtPt(mm) + ' ≡ ' + fmtD(mm);
+  }
+
+  /* Format: user unit → points (input conversion display) */
+  function fmtInput(mm) {
+    const u = els.dimUnit.value;
+    const isPointUnit = (u === 'pt' || u === 'ptD' || u === 'ciceros' || u === 'picas');
+    if (isPointUnit) return fmtD(mm);
+    return fmtD(mm) + ' → ' + fmtPt(mm);
+  }
+
   function updateDimLabels() {
     const u = els.dimUnit.value;
     const lbl = dimLabel(u);
@@ -535,7 +585,7 @@ canvas{display:block;background:#fff}
     $('dimUnitH').textContent = lbl;
   }
 
-  // When dimension unit changes: convert current values to new unit
+  // When dimension unit changes: convert current values to new unit AND sync other selectors
   els.dimUnit.addEventListener('change', () => {
     const oldUnit = prevDimUnit;
     const newUnit = els.dimUnit.value;
@@ -553,18 +603,75 @@ canvas{display:block;background:#fff}
     prevDimUnit = newUnit;
     updateDimLabels();
     updateDimReadout();
+
+    // ── SYNC: propagate unit change to margins and display ──
+    syncMarginUnit(newUnit);
+    syncDisplayUnit(newUnit);
+    updatePtNotice();
+
     recalc();
   });
 
-  // Show mm equivalent when not in mm
+  /* ── SYNC UNITS across all selectors ── */
+  function syncMarginUnit(newUnit) {
+    const oldMU = prevMarginUnit;
+    if (oldMU === newUnit) return;
+    const dec = dimDec(newUnit);
+    marginFields.forEach(f => {
+      const oldVal = parseFloat(f.value) || 0;
+      const mm = dimFactor(oldMU) !== 0 ? oldVal / dimFactor(oldMU) : oldVal;
+      f.value = (mm * dimFactor(newUnit)).toFixed(dec);
+      f.step = dec >= 3 ? '0.001' : dec >= 2 ? '0.01' : '0.1';
+    });
+    els.marginUnit.value = newUnit;
+    prevMarginUnit = newUnit;
+    updateMarginLabels();
+    updateMarginReadout();
+  }
+
+  function syncDisplayUnit(newUnit) {
+    els.displayUnit.value = newUnit;
+  }
+
+  /* ── POINT CONVERSION NOTICE ── */
+  function updatePtNotice() {
+    const u = els.dimUnit.value;
+    const notice = $('ptConvNotice');
+    const sync = $('syncNotice');
+    const isPointUnit = (u === 'pt' || u === 'ptD' || u === 'ciceros' || u === 'picas');
+    const ptSysName = els.pointSystem.value === 'didot' ? 'puntos Didot' : 'puntos anglosajones';
+
+    if (isPointUnit) {
+      notice.classList.remove('show');
+    } else {
+      notice.classList.add('show');
+      $('ptConvFrom').textContent = dimLabel(u);
+      $('ptConvTo').textContent = ptSysName;
+      $('ptConvBack').textContent = dimLabel(u);
+    }
+
+    // Show sync notice briefly
+    sync.classList.add('show');
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => sync.classList.remove('show'), 3000);
+  }
+  let syncTimer = null;
+
+  // Show mm + pt equivalent when not in mm
   function updateDimReadout() {
     const u = els.dimUnit.value;
     const rd = $('dimMmReadout');
+    const isPointU = (u === 'pt' || u === 'ptD' || u === 'ciceros' || u === 'picas');
     if (u === 'mm') { rd.style.display = 'none'; return; }
     const wMM = dimToMM(parseFloat(els.pageW.value) || 0);
     const hMM = dimToMM(parseFloat(els.pageH.value) || 0);
     rd.style.display = 'block';
-    rd.textContent = `≡ ${wMM.toFixed(2)} × ${hMM.toFixed(2)} mm`;
+    if (isPointU) {
+      rd.textContent = `≡ ${wMM.toFixed(2)} × ${hMM.toFixed(2)} mm`;
+    } else {
+      const ptSys = els.pointSystem.value === 'didot' ? 'pt D' : 'pt';
+      rd.textContent = `≡ ${mmToPt(wMM).toFixed(2)} × ${mmToPt(hMM).toFixed(2)} ${ptSys} ≡ ${wMM.toFixed(2)} × ${hMM.toFixed(2)} mm`;
+    }
   }
 
   // Paper size preset: values are always in mm, convert to current unit
@@ -604,10 +711,16 @@ canvas{display:block;background:#fff}
   function updateMarginReadout() {
     const u = els.marginUnit.value;
     const rd = $('marginMmReadout');
+    const isPointU = (u === 'pt' || u === 'ptD' || u === 'ciceros' || u === 'picas');
     if (u === 'mm') { rd.style.display = 'none'; return; }
     const vals = marginFields.map(f => marginToMM(parseFloat(f.value) || 0));
     rd.style.display = 'block';
-    rd.textContent = `≡ Sup: ${vals[0].toFixed(2)} mm · Inf: ${vals[1].toFixed(2)} mm · Int: ${vals[2].toFixed(2)} mm · Ext: ${vals[3].toFixed(2)} mm`;
+    if (isPointU) {
+      rd.textContent = `≡ Sup: ${vals[0].toFixed(2)} mm · Inf: ${vals[1].toFixed(2)} mm · Int: ${vals[2].toFixed(2)} mm · Ext: ${vals[3].toFixed(2)} mm`;
+    } else {
+      const ptSys = els.pointSystem.value === 'didot' ? 'pt D' : 'pt';
+      rd.textContent = `→ ${ptSys}: Sup: ${mmToPt(vals[0]).toFixed(1)} · Inf: ${mmToPt(vals[1]).toFixed(1)} · Int: ${mmToPt(vals[2]).toFixed(1)} · Ext: ${mmToPt(vals[3]).toFixed(1)} ≡ mm: ${vals[0].toFixed(2)} · ${vals[1].toFixed(2)} · ${vals[2].toFixed(2)} · ${vals[3].toFixed(2)}`;
+    }
   }
 
   els.marginUnit.addEventListener('change', () => {
@@ -622,9 +735,50 @@ canvas{display:block;background:#fff}
     prevMarginUnit = newU;
     updateMarginLabels();
     updateMarginReadout();
+
+    // ── SYNC: propagate to dim unit and display ──
+    syncDimUnit(newU);
+    syncDisplayUnit(newU);
+    updatePtNotice();
+
     recalc();
   });
+
+  /* ── SYNC dimUnit from margin change ── */
+  function syncDimUnit(newUnit) {
+    const oldU = prevDimUnit;
+    if (oldU === newUnit) return;
+    const wOld = parseFloat(els.pageW.value) || 0;
+    const hOld = parseFloat(els.pageH.value) || 0;
+    const wMM = dimToMM(wOld, oldU);
+    const hMM = dimToMM(hOld, oldU);
+    const dec = dimDec(newUnit);
+    els.pageW.value = mmToDimVal(wMM, newUnit).toFixed(dec);
+    els.pageH.value = mmToDimVal(hMM, newUnit).toFixed(dec);
+    els.pageW.step = dec >= 3 ? '0.001' : dec >= 2 ? '0.01' : '0.1';
+    els.pageH.step = els.pageW.step;
+    els.dimUnit.value = newUnit;
+    prevDimUnit = newUnit;
+    updateDimLabels();
+    updateDimReadout();
+  }
   marginFields.forEach(f => f.addEventListener('input', updateMarginReadout));
+
+  /* ── Display unit sync ── */
+  els.displayUnit.addEventListener('change', () => {
+    // Sync dim + margin units when display changes
+    const newU = els.displayUnit.value;
+    syncDimUnit(newU);
+    syncMarginUnit(newU);
+    updatePtNotice();
+    recalc();
+  });
+
+  /* ── Point system change → update notice ── */
+  els.pointSystem.addEventListener('change', () => {
+    updatePtNotice();
+    recalc();
+  });
 
   /* ── MODULE MANUAL VERIFICATION ── */
   $('modManualCheck').addEventListener('click', verifyModuleManual);
@@ -663,7 +817,7 @@ canvas{display:block;background:#fff}
       const rem = avail % mRows;
       if (rem === 0) {
         vBox.className = 'mod-verify ok';
-        vBox.innerHTML = `<strong>✓ Válido:</strong> ${mRows} filas × ${lpm} lín./módulo + ${gutLines} lín. intercampos = ${totalLines} líneas. Cada módulo: ${fmtD(lpm * d.leadMM)} de alto.`;
+        vBox.innerHTML = `<strong>✓ Válido:</strong> ${mRows} filas × ${lpm} lín./módulo + ${gutLines} lín. intercampos = ${totalLines} líneas. Cada módulo: ${fmtDual(lpm * d.leadMM)} de alto.`;
       } else {
         fRows.classList.add('error');
         vBox.className = 'mod-verify err';
@@ -694,7 +848,7 @@ canvas{display:block;background:#fff}
       const needed = mRows * mLines + (mRows - 1) * gLC;
       if (needed === totalLines) {
         vBox.className = 'mod-verify ok';
-        vBox.innerHTML = `<strong>✓ ¡Perfecto!</strong> ${mRows} filas × ${mLines} lín. + ${(mRows-1)*gLC} lín. intercampos = ${needed} = ${totalLines} líneas totales. Módulo: ${fmtD(mLines * d.leadMM)} alto × ${fmtD(d.colW)} ancho.`;
+        vBox.innerHTML = `<strong>✓ ¡Perfecto!</strong> ${mRows} filas × ${mLines} lín. + ${(mRows-1)*gLC} lín. intercampos = ${needed} = ${totalLines} líneas totales. Módulo: ${fmtDual(mLines * d.leadMM)} alto × ${fmtDual(d.colW)} ancho.`;
         fRows.classList.remove('error');
         fLines.classList.remove('error');
       } else {
@@ -785,7 +939,7 @@ canvas{display:block;background:#fff}
     const bodyPt=parseFloat(els.bodyPt.value)||10,leadF=parseFloat(els.leadFactor.value)||1.2;
     const leadPt=bodyPt*leadF,leadMM=ptToMM(leadPt),bodyMM=ptToMM(bodyPt);
     const gutMM=leadMM*(gLC>0?gLC:1),gutPt=leadPt*(gLC>0?gLC:1);
-    $('gutterValDisplay').textContent=fmtD(gutMM);$('gutterValPt').textContent=gutPt.toFixed(2);
+    $('gutterValDisplay').textContent=fmtDual(gutMM);$('gutterValPt').textContent=gutPt.toFixed(2);$('gutterPtLabel').textContent=els.pointSystem.value==='didot'?'pt D':'pt';
     const textW=Math.max(0,pageW-mIn-mOut),textH=Math.max(0,pageH-mTop-mBot);
     const tL=leadMM>0?Math.floor(textH/leadMM):0;
     const rem=leadMM>0?textH-tL*leadMM:0;
@@ -797,14 +951,18 @@ canvas{display:block;background:#fff}
     const sN=els.pointSystem.value==='didot'?'Didot':'Anglo';
 
     // Adjust box
-    $('adjustBox').innerHTML=`<h4>⊕ Procedimiento</h4>
-      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto texto: <span class="mono">${fmtD(pageH)}</span> − (<span class="mono">${fmtD(mTop)}</span> + <span class="mono">${fmtD(mBot)}</span>) = <span class="mono">${fmtD(textH)}</span></span></div>
-      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interl.: <span class="mono">${bodyPt} pt</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} pt</span> = <span class="mono">${fmtD(leadMM)}</span></span></div>
-      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas: <span class="mono">${fmtD(textH)}</span> ÷ <span class="mono">${fmtD(leadMM)}</span> = <span class="mono">${(textH/leadMM).toFixed(3)}</span> → <span class="mono">${tL} lín.</span></span></div>
-      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${fmtD(rem)}</span></span></div>
-      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">M. inf. corregido: <span class="mono">${fmtD(mBot)}</span> + <span class="mono">${fmtD(rem)}</span> = <span class="mono">${fmtD(mBA)}</span></span></div>`;
-    if(isEx){$('adjustResult').innerHTML=`<strong>✓ Rejilla exacta.</strong> ${tL} líneas en ${fmtD(tHA)}.`;$('btnApply').style.display='none'}
-    else{$('adjustResult').innerHTML=`<strong>△ Ajuste:</strong> M. inferior de <strong style="color:var(--ink)">${fmtD(mBot)}</strong> → <strong>${fmtD(mBA)}</strong> (+${fmtD(rem)}). ${tL} líneas exactas.`;$('btnApply').style.display='inline-flex'}
+    const isPointU = (els.dimUnit.value === 'pt' || els.dimUnit.value === 'ptD' || els.dimUnit.value === 'ciceros' || els.dimUnit.value === 'picas');
+    const convArrow = isPointU ? '' : ' → ';
+    const ptSuffix = els.pointSystem.value === 'didot' ? 'pt D' : 'pt';
+
+    $('adjustBox').innerHTML=`<h4>⊕ Procedimiento${isPointU ? '' : ' <span style="font-size:.7rem;font-weight:500;color:var(--ink-muted)">(cálculo en '+ptSuffix+')</span>'}</h4>
+      <div class="adjust-step"><span class="step-num">01</span><span class="step-text">Alto texto: <span class="mono">${fmtInput(pageH)}</span> − (<span class="mono">${fmtInput(mTop)}</span> + <span class="mono">${fmtInput(mBot)}</span>) = <span class="mono">${fmtPt(textH)}</span>${!isPointU ? ' ≡ <span class="mono">' + fmtD(textH) + '</span>' : ''}</span></div>
+      <div class="adjust-step"><span class="step-num">02</span><span class="step-text">Interl.: <span class="mono">${bodyPt} ${ptSuffix}</span> × <span class="mono">${leadF}×</span> = <span class="mono">${leadPt.toFixed(2)} ${ptSuffix}</span>${!isPointU ? ' ≡ <span class="mono">' + fmtD(leadMM) + '</span>' : ''}</span></div>
+      <div class="adjust-step"><span class="step-num">03</span><span class="step-text">Líneas: <span class="mono">${fmtPt(textH)}</span> ÷ <span class="mono">${leadPt.toFixed(2)} ${ptSuffix}</span> = <span class="mono">${(mmToPt(textH)/leadPt).toFixed(3)}</span> → <span class="mono">${tL} lín.</span></span></div>
+      <div class="adjust-step"><span class="step-num">04</span><span class="step-text">Sobrante: <span class="mono">${fmtDual(rem)}</span></span></div>
+      <div class="adjust-step"><span class="step-num">05</span><span class="step-text">M. inf. corregido: <span class="mono">${fmtPt(mBot)}</span> + <span class="mono">${fmtPt(rem)}</span> = <span class="mono">${fmtDual(mBA)}</span></span></div>`;
+    if(isEx){$('adjustResult').innerHTML=`<strong>✓ Rejilla exacta.</strong> ${tL} líneas en ${fmtDual(tHA)}.`;$('btnApply').style.display='none'}
+    else{$('adjustResult').innerHTML=`<strong>△ Ajuste:</strong> M. inferior de <strong style="color:var(--ink)">${fmtDual(mBot)}</strong> → <strong>${fmtDual(mBA)}</strong> (+${fmtDual(rem)}). ${tL} líneas exactas.`;$('btnApply').style.display='inline-flex'}
 
     /* ── MODULE ADJUSTMENT ──
      * Calculate which row counts produce exact module divisions (no remainder).
@@ -836,7 +994,7 @@ canvas{display:block;background:#fff}
       <div class="adjust-step"><span class="step-num">04</span><span class="step-text">División: <span class="mono">${lFM}</span> ÷ <span class="mono">${nRows} filas</span> = <span class="mono">${lPM} lín./módulo</span>${mR>0?` <span style="color:var(--cs-margin)">+ ${mR} lín. sobrantes</span>`:' <span style="color:var(--cs-gutter-v)">exacto</span>'}</span></div>`;
 
     if(modIsExact){
-      modAdjRes.innerHTML=`<strong>✓ Módulos exactos.</strong> ${nRows} filas × ${lPM} lín. = ${nRows*lPM} lín. + ${lFG} lín. intercampos = ${tL} lín. totales. Cada módulo: ${fmtD(modH)} de alto.`;
+      modAdjRes.innerHTML=`<strong>✓ Módulos exactos.</strong> ${nRows} filas × ${lPM} lín. = ${nRows*lPM} lín. + ${lFG} lín. intercampos = ${tL} lín. totales. Cada módulo: ${fmtDual(modH)} de alto.`;
       modOpts.innerHTML='';
     } else {
       modAdjRes.innerHTML=`<strong>△ Ajuste necesario:</strong> Con ${nRows} filas sobran <strong>${mR} línea${mR>1?'s':''}</strong> que no encajan en los módulos. Selecciona una cantidad de filas que divida exactamente:`;
@@ -864,21 +1022,25 @@ canvas{display:block;background:#fff}
     let mN='';if(mR>0)mN=` (sobran ${mR} lín.)`;
     const wC=colW<=0?' warn':'';
     const dU=els.dimUnit.value;
-    const showMM=dU!=='mm';
-    const mmSuf=(v)=>showMM?` <span style="color:var(--ink-faint);font-size:.74rem">(${v.toFixed(2)} mm)</span>`:'';
+    const showConv=!isPointU;
+    const convSuf=(v)=>showConv?` <span style="color:var(--ink-faint);font-size:.74rem">≡ ${fmtD(v)}</span>`:'';
     $('resultsBox').innerHTML=`
-      <div class="result-line"><span class="result-label">Área de texto</span><span class="result-value">${fmtD(textW)} × ${fmtD(tHA)}${mmSuf(textW)}</span></div>
-      <div class="result-line"><span class="result-label">Área texto (${sN})</span><span class="result-value">${mmToPt(textW).toFixed(1)} × ${mmToPt(tHA).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">Ancho columna</span><span class="result-value${wC}">${fmtD(colW)} = ${mmToPt(colW).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">Cuerpo</span><span class="result-value">${bodyPt} pt = ${fmtD(bodyMM)}</span></div>
-      <div class="result-line"><span class="result-label">Interlineado</span><span class="result-value">${leadPt.toFixed(2)} pt = ${fmtD(leadMM)}</span></div>
-      <div class="result-line"><span class="result-label">Medianil (V=H)</span><span class="result-value">${fmtD(gutMM)} = ${gutPt.toFixed(2)} pt</span></div>
+      <div class="result-line"><span class="result-label">Área de texto (${ptSuffix})</span><span class="result-value">${mmToPt(textW).toFixed(2)} × ${mmToPt(tHA).toFixed(2)} ${ptSuffix}</span></div>
+      ${showConv ? '<div class="result-line"><span class="result-label">Área de texto (' + dimLabel(dU) + ')</span><span class="result-value">' + fmtD(textW) + ' × ' + fmtD(tHA) + '</span></div>' : ''}
+      <div class="result-line"><span class="result-label">Ancho columna</span><span class="result-value${wC}">${mmToPt(colW).toFixed(2)} ${ptSuffix}${convSuf(colW)}</span></div>
+      <div class="result-line"><span class="result-label">Cuerpo</span><span class="result-value">${bodyPt} ${ptSuffix}${convSuf(bodyMM)}</span></div>
+      <div class="result-line"><span class="result-label">Interlineado</span><span class="result-value">${leadPt.toFixed(2)} ${ptSuffix}${convSuf(leadMM)}</span></div>
+      <div class="result-line"><span class="result-label">Medianil (V=H)</span><span class="result-value">${gutPt.toFixed(2)} ${ptSuffix}${convSuf(gutMM)}</span></div>
       <div class="result-line"><span class="result-label">Líneas base</span><span class="result-value ${isEx?'ok':'warn'}">${tL} líneas</span></div>
       <div class="result-line"><span class="result-label">Módulos</span><span class="result-value">${nCols}×${nRows} = ${nCols*nRows}</span></div>
       <div class="result-line"><span class="result-label">Lín./módulo</span><span class="result-value">${lPM} lín.${mN}</span></div>
-      <div class="result-line"><span class="result-label">Alto módulo</span><span class="result-value">${fmtD(modH)} = ${mmToPt(modH).toFixed(2)} pt</span></div>
-      <div class="result-line"><span class="result-label">Ancho módulo</span><span class="result-value">${fmtD(colW)} = ${mmToPt(colW).toFixed(1)} pt</span></div>
-      <div class="result-line"><span class="result-label">1 pt (${sN})</span><span class="result-value">${ptMM().toFixed(4)} mm</span></div>`;
+      <div class="result-line"><span class="result-label">Alto módulo</span><span class="result-value">${mmToPt(modH).toFixed(2)} ${ptSuffix}${convSuf(modH)}</span></div>
+      <div class="result-line"><span class="result-label">Ancho módulo</span><span class="result-value">${mmToPt(colW).toFixed(2)} ${ptSuffix}${convSuf(colW)}</span></div>
+      <div class="result-line"><span class="result-label">M. superior</span><span class="result-value">${mmToPt(mTop).toFixed(2)} ${ptSuffix}${convSuf(mTop)}</span></div>
+      <div class="result-line"><span class="result-label">M. inferior (ajust.)</span><span class="result-value">${mmToPt(mBA).toFixed(2)} ${ptSuffix}${convSuf(mBA)}</span></div>
+      <div class="result-line"><span class="result-label">M. interior</span><span class="result-value">${mmToPt(mIn).toFixed(2)} ${ptSuffix}${convSuf(mIn)}</span></div>
+      <div class="result-line"><span class="result-label">M. exterior</span><span class="result-value">${mmToPt(mOut).toFixed(2)} ${ptSuffix}${convSuf(mOut)}</span></div>
+      <div class="result-line"><span class="result-label">1 ${ptSuffix} (${sN})</span><span class="result-value">${ptMM().toFixed(4)} mm</span></div>`;
 
     const d={pageW,pageH,mTop,mBot:mBA,mBotOrig:mBot,mIn,mOut,textW,textH:tHA,nCols,nRows,gutterMM:gutMM,gutterLineCount:gLC,colW,leadMM,totalLines:tL,linesPerModule:lPM,moduleH_mm:modH,remainder:rem,isExact:isEx};
     lastD=d;
@@ -1130,12 +1292,16 @@ canvas{display:block;background:#fff}
   function updatePrintInstructions(d){
     const sN=els.pointSystem.value==='didot'?'Didot':'Anglosajón';
     const sU=els.pointSystem.value==='didot'?'pt Didot':'pt';
-    $('printStep1Vals').innerHTML=`Anchura: <b>${d.pageW.toFixed(2)} mm</b> (${mmToPt(d.pageW).toFixed(1)} ${sU})<br>Altura: <b>${d.pageH.toFixed(2)} mm</b> (${mmToPt(d.pageH).toFixed(1)} ${sU})`;
-    $('printStep2Vals').innerHTML=`Superior (Cabeza): <b>${d.mTop.toFixed(2)} mm</b> (${mmToPt(d.mTop).toFixed(1)} ${sU})<br>Inferior (Pie) ajustado: <b>${d.mBot.toFixed(3)} mm</b> (${mmToPt(d.mBot).toFixed(2)} ${sU})<br>Interior (Lomo): <b>${d.mIn.toFixed(2)} mm</b> (${mmToPt(d.mIn).toFixed(1)} ${sU})<br>Exterior (Corte): <b>${d.mOut.toFixed(2)} mm</b> (${mmToPt(d.mOut).toFixed(1)} ${sU})`;
-    $('printStep3Vals').innerHTML=`Número de columnas: <b>${d.nCols}</b><br>Medianil: <b>${d.gutterMM.toFixed(3)} mm</b> (${mmToPt(d.gutterMM).toFixed(2)} ${sU})`;
-    $('printStep4Vals').innerHTML=`Inicio: <b>${d.mTop.toFixed(2)} mm</b> (= margen superior)<br>Incremento cada: <b>${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} ${sU}</b> = <b>${d.leadMM.toFixed(4)} mm</b> (= interlineado)`;
-    $('printStep5Vals').innerHTML=`Filas: <b>${d.nRows}</b> — Medianil de filas: <b>${d.gutterMM.toFixed(3)} mm</b> (${mmToPt(d.gutterMM).toFixed(2)} ${sU})<br>Columnas: <b>${d.nCols}</b> — Medianil de columnas: <b>${d.gutterMM.toFixed(3)} mm</b>`;
-    $('printStep6Vals').innerHTML=`Área de texto: <b>${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm</b><br>Ancho columna: <b>${d.colW.toFixed(2)} mm</b> (${mmToPt(d.colW).toFixed(1)} ${sU})<br>Líneas base: <b>${d.totalLines} líneas</b><br>Módulos: <b>${d.nCols} × ${d.nRows} = ${d.nCols*d.nRows}</b><br>Líneas por módulo: <b>${d.linesPerModule}</b><br>Alto módulo: <b>${d.moduleH_mm.toFixed(3)} mm</b>`;
+    const dU=els.dimUnit.value;
+    const isPointU=(dU==='pt'||dU==='ptD'||dU==='ciceros'||dU==='picas');
+    const dual=(mm)=>`<b>${mmToPt(mm).toFixed(2)} ${sU}</b> (${mm.toFixed(2)} mm)`;
+    const dualS=(mm)=>`<b>${mmToPt(mm).toFixed(2)} ${sU}</b> (${mm.toFixed(3)} mm)`;
+    $('printStep1Vals').innerHTML=`Anchura: ${dual(d.pageW)}<br>Altura: ${dual(d.pageH)}`;
+    $('printStep2Vals').innerHTML=`Superior (Cabeza): ${dual(d.mTop)}<br>Inferior (Pie) ajustado: ${dualS(d.mBot)}<br>Interior (Lomo): ${dual(d.mIn)}<br>Exterior (Corte): ${dual(d.mOut)}`;
+    $('printStep3Vals').innerHTML=`Número de columnas: <b>${d.nCols}</b><br>Medianil: ${dualS(d.gutterMM)}`;
+    $('printStep4Vals').innerHTML=`Inicio: ${dual(d.mTop)} (= margen superior)<br>Incremento cada: <b>${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} ${sU}</b> = <b>${d.leadMM.toFixed(4)} mm</b> (= interlineado)`;
+    $('printStep5Vals').innerHTML=`Filas: <b>${d.nRows}</b> — Medianil de filas: ${dualS(d.gutterMM)}<br>Columnas: <b>${d.nCols}</b> — Medianil de columnas: ${dualS(d.gutterMM)}`;
+    $('printStep6Vals').innerHTML=`Área de texto: <b>${mmToPt(d.textW).toFixed(2)} × ${mmToPt(d.textH).toFixed(2)} ${sU}</b> (${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm)<br>Ancho columna: ${dual(d.colW)}<br>Líneas base: <b>${d.totalLines} líneas</b><br>Módulos: <b>${d.nCols} × ${d.nRows} = ${d.nCols*d.nRows}</b><br>Líneas por módulo: <b>${d.linesPerModule}</b><br>Alto módulo: ${dualS(d.moduleH_mm)}`;
   }
 
   /* ══════════════════════════════════════
@@ -1151,6 +1317,7 @@ canvas{display:block;background:#fff}
     if(!lastD)return;
     const d=lastD;
     const sN=els.pointSystem.value==='didot'?'Didot':'Anglo';
+    const sU=els.pointSystem.value==='didot'?'pt D':'pt';
     const subject=encodeURIComponent(`Retícula Editorial — ${name}`);
     const bodyLines=[
       `CALCULADORA DE RETÍCULA EDITORIAL`,
@@ -1161,29 +1328,29 @@ canvas{display:block;background:#fff}
       `CORREO: ${email}`,
       ``,
       `═══ PARÁMETROS ═══`,
-      `Formato: ${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm`,
+      `Formato: ${mmToPt(d.pageW).toFixed(2)} × ${mmToPt(d.pageH).toFixed(2)} ${sU} (${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm)`,
       `Sistema: ${sN}`,
-      `Cuerpo: ${parseFloat(els.bodyPt.value)} pt | Factor: ${parseFloat(els.leadFactor.value)}×`,
-      `Interlineado: ${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} pt = ${d.leadMM.toFixed(4)} mm`,
+      `Cuerpo: ${parseFloat(els.bodyPt.value)} ${sU} | Factor: ${parseFloat(els.leadFactor.value)}×`,
+      `Interlineado: ${(parseFloat(els.bodyPt.value)*parseFloat(els.leadFactor.value)).toFixed(2)} ${sU} = ${d.leadMM.toFixed(4)} mm`,
       ``,
-      `═══ MÁRGENES ═══`,
-      `Superior: ${d.mTop.toFixed(2)} mm`,
-      `Inferior (ajustado): ${d.mBot.toFixed(3)} mm`,
-      `Interior: ${d.mIn.toFixed(2)} mm`,
-      `Exterior: ${d.mOut.toFixed(2)} mm`,
+      `═══ MÁRGENES (${sU} / mm) ═══`,
+      `Superior: ${mmToPt(d.mTop).toFixed(2)} ${sU} (${d.mTop.toFixed(2)} mm)`,
+      `Inferior (ajustado): ${mmToPt(d.mBot).toFixed(2)} ${sU} (${d.mBot.toFixed(3)} mm)`,
+      `Interior: ${mmToPt(d.mIn).toFixed(2)} ${sU} (${d.mIn.toFixed(2)} mm)`,
+      `Exterior: ${mmToPt(d.mOut).toFixed(2)} ${sU} (${d.mOut.toFixed(2)} mm)`,
       ``,
       `═══ ESTRUCTURA ═══`,
       `Columnas: ${d.nCols} | Filas módulos: ${d.nRows}`,
-      `Medianil (V=H): ${d.gutterMM.toFixed(3)} mm (${d.gutterLineCount} lín. base)`,
-      `Área de texto: ${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm`,
-      `Ancho columna: ${d.colW.toFixed(2)} mm`,
+      `Medianil (V=H): ${mmToPt(d.gutterMM).toFixed(2)} ${sU} (${d.gutterMM.toFixed(3)} mm) — ${d.gutterLineCount} lín. base`,
+      `Área de texto: ${mmToPt(d.textW).toFixed(2)} × ${mmToPt(d.textH).toFixed(2)} ${sU} (${d.textW.toFixed(2)} × ${d.textH.toFixed(2)} mm)`,
+      `Ancho columna: ${mmToPt(d.colW).toFixed(2)} ${sU} (${d.colW.toFixed(2)} mm)`,
       `Líneas base: ${d.totalLines}`,
       `Líneas/módulo: ${d.linesPerModule}`,
-      `Alto módulo: ${d.moduleH_mm.toFixed(3)} mm`,
+      `Alto módulo: ${mmToPt(d.moduleH_mm).toFixed(2)} ${sU} (${d.moduleH_mm.toFixed(3)} mm)`,
       `Rejilla: ${d.isExact?'✓ Exacta':'△ Requiere ajuste margen inferior'}`,
       ``,
       `═══ CONFIGURACIÓN INDESIGN ═══`,
-      `Nuevo documento: ${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm`,
+      `Nuevo documento: ${d.pageW.toFixed(2)} × ${d.pageH.toFixed(2)} mm (${mmToPt(d.pageW).toFixed(2)} × ${mmToPt(d.pageH).toFixed(2)} ${sU})`,
       `Márgenes: Sup=${d.mTop.toFixed(2)} Inf=${d.mBot.toFixed(3)} Int=${d.mIn.toFixed(2)} Ext=${d.mOut.toFixed(2)} mm`,
       `Columnas: ${d.nCols}, Medianil: ${d.gutterMM.toFixed(3)} mm`,
       `Cuadrícula base: Inicio=${d.mTop.toFixed(2)} mm, Incremento=${d.leadMM.toFixed(4)} mm`,
@@ -1215,6 +1382,7 @@ canvas{display:block;background:#fff}
   let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{if(autoZoom)recalc()},80)});
   updateDimLabels();
   updateMarginLabels();
+  updatePtNotice();
   recalc();
 })();
 </script>
